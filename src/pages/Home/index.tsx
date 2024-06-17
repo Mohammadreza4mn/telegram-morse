@@ -1,0 +1,89 @@
+import { ChangeEventHandler, useState } from "react";
+import Textarea from "components/input/Textarea";
+import morseTable from "constants/morseTable";
+import { Container, ButtonSwap, TextareaWrap, TitleWrap } from "./styled";
+import type { TranslateMode } from "./interface";
+
+function Home() {
+  const [morseCode, setMorseCode] = useState("");
+  const [text, setText] = useState("");
+
+  const [translateMode, setTranslateMode] =
+    useState<TranslateMode>("textToMorse");
+
+  const handleTranslateTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
+    target,
+  }) => {
+    const textArray = target.value.toLocaleUpperCase().split("");
+
+    const morseCode = textArray.reduce(
+      (accumulator, currentValue) =>
+        accumulator + `${morseTable[currentValue]} `,
+      ""
+    );
+
+    setText(target.value);
+    setMorseCode(morseCode);
+  };
+
+  const handleTranslateMorseToText: ChangeEventHandler<HTMLTextAreaElement> = ({
+    target,
+  }) => {
+    const codeArray = target.value.trim().split(" ");
+
+    const morseTableReverse = Object.fromEntries(
+      Object.entries(morseTable).map((item) => item.reverse())
+    );
+
+    const text = codeArray.reduce(
+      (accumulator, currentValue) =>
+        accumulator + `${morseTableReverse[currentValue]}`,
+      ""
+    );
+
+    setMorseCode(target.value);
+    setText(text);
+  };
+
+  const handleSwapTranslateMode = () => {
+    setTranslateMode((previousState) =>
+      previousState === "morseToText" ? "textToMorse" : "morseToText"
+    );
+  };
+  return (
+    <Container>
+      <TitleWrap
+        direction={translateMode === "textToMorse" ? "row" : "row-reverse"}
+      >
+        <strong>Text</strong>
+        <ButtonSwap
+          alt="btn-swap"
+          src="/assets/icon/swap.svg"
+          onClick={handleSwapTranslateMode}
+        />
+        <strong>Morse</strong>
+      </TitleWrap>
+
+      <TextareaWrap
+        direction={
+          translateMode === "textToMorse" ? "column" : "column-reverse"
+        }
+      >
+        <Textarea
+          name="text"
+          value={text}
+          onChange={handleTranslateTextToMorse}
+          disabled={translateMode === "morseToText"}
+        />
+        <Textarea
+          name="morse"
+          value={morseCode}
+          onChange={handleTranslateMorseToText}
+          disabled={translateMode === "textToMorse"}
+        />
+      </TextareaWrap>
+    </Container>
+  );
+}
+
+export default Home;
