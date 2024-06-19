@@ -1,9 +1,5 @@
 import { DefaultTheme } from "styled-components";
 
-type ThemeName = "light" | "dark";
-
-const defaultColorThemeName: ThemeName = "light";
-
 const lightTheme: DefaultTheme = {
   colors: {
     backgroundColor: "#ffffff",
@@ -26,5 +22,4 @@ const darkTheme: DefaultTheme = {
   mode: "dark",
 };
 
-export type { ThemeName };
-export { darkTheme, lightTheme, defaultColorThemeName };
+export { darkTheme, lightTheme };
