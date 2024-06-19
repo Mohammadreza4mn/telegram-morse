@@ -2,14 +2,14 @@ import { ChangeEventHandler, useState } from "react";
 import Textarea from "components/input/Textarea";
 import morseTable from "constants/morseTable";
 import { Container, ButtonSwap, TextareaWrap, TitleWrap } from "./styled";
-import type { TranslateMode } from "./interface";
+import type { TTranslateMode } from "./interface";
 
 function Home() {
   const [morseCode, setMorseCode] = useState("");
   const [text, setText] = useState("");
 
   const [translateMode, setTranslateMode] =
-    useState<TranslateMode>("textToMorse");
+    useState<TTranslateMode>("textToMorse");
 
   const handleTranslateTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
     target,
@@ -18,7 +18,7 @@ function Home() {
 
     const morseCode = textArray.reduce(
       (accumulator, currentValue) =>
-        accumulator + `${morseTable[currentValue]} `,
+        accumulator + `${morseTable[currentValue] || "/"} `,
       ""
     );
 
@@ -32,12 +32,14 @@ function Home() {
     const codeArray = target.value.trim().split(" ");
 
     const morseTableReverse = Object.fromEntries(
-      Object.entries(morseTable).map((item) => item.reverse())
+      Object.entries(morseTable)
+        .filter(([key]) => key !== "\n")
+        .map((item) => item.reverse())
     );
 
     const text = codeArray.reduce(
       (accumulator, currentValue) =>
-        accumulator + `${morseTableReverse[currentValue]}`,
+        accumulator + (morseTableReverse[currentValue] || " "),
       ""
     );
 
@@ -45,11 +47,11 @@ function Home() {
     setText(text);
   };
 
-  const handleSwapTranslateMode = () => {
+  const handleSwapTranslateMode = () =>
     setTranslateMode((previousState) =>
       previousState === "morseToText" ? "textToMorse" : "morseToText"
     );
-  };
+
   return (
     <Container>
       <TitleWrap
@@ -69,6 +71,7 @@ function Home() {
         }
       >
         <Textarea
+          rows={8}
           name="text"
           autoFocus
           value={text}
@@ -76,6 +79,7 @@ function Home() {
           disabled={translateMode === "morseToText"}
         />
         <Textarea
+          rows={8}
           name="morse"
           value={morseCode}
           onChange={handleTranslateMorseToText}

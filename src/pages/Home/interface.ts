@@ -1,3 +1,3 @@
-type TranslateMode = "textToMorse" | "morseToText";
+type TTranslateMode = "textToMorse" | "morseToText";
 
-export type { TranslateMode };
+export type { TTranslateMode };
