@@ -57,8 +57,7 @@ function Home() {
       >
         <strong>Text</strong>
         <ButtonSwap
-          alt="btn-swap"
-          src="/assets/icon/swap.svg"
+          className="titleWrap__button"
           onClick={handleSwapTranslateMode}
         />
         <strong>Morse</strong>
@@ -71,6 +70,7 @@ function Home() {
       >
         <Textarea
           name="text"
+          autoFocus
           value={text}
           onChange={handleTranslateTextToMorse}
           disabled={translateMode === "morseToText"}

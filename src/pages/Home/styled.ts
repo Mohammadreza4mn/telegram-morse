@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ReactComponent as Swap } from "assets/icon/swap.svg";
 
 const Container = styled.main`
   display: grid;
@@ -33,20 +34,19 @@ const TitleWrap = styled.section<{
     user-select: none;
   }
 
-  img {
+  .titleWrap__button {
     position: absolute;
     bottom: 0;
     left: calc(50% - 1.25rem);
   }
 `;
 
-const ButtonSwap = styled.img`
+const ButtonSwap = styled(Swap)`
   width: 1.2rem;
   height: 1.2rem;
   padding: 0.65rem;
   cursor: pointer;
-  background-color: transparent;
-  filter: ${({ theme }) => (theme.mode === "dark" ? "contrast(0)" : "unset")};
+  fill: ${({ theme }) => theme.colors.primaryText};
   border-radius: calc(infinity * 1px);
 
   &:hover {
