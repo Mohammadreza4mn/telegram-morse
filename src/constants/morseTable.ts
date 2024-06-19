@@ -63,8 +63,8 @@ const character = {
   "\n": "/",
 };
 
-type MorseTable = Record<string, string>;
+type TMorseTable = Record<string, string>;
 
-const morseTable: MorseTable = { ...numbers, ...letters, ...character };
+const morseTable: TMorseTable = { ...numbers, ...letters, ...character };
 
 export default morseTable;
