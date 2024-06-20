@@ -1,7 +1,7 @@
-import { TextareaHTMLAttributes } from "react";
+import type { ITextarea } from "./interface";
 import { StyledTextarea } from "./styled";
 
-function Textarea(props: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+function Textarea(props: ITextarea) {
   return <StyledTextarea {...props} />;
 }
 

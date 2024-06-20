@@ -1,6 +1,6 @@
-import styled from "styled-components";
+import styled, { CSSProperties } from "styled-components";
 
-const StyledTextarea = styled.textarea`
+const StyledTextarea = styled.textarea<{ customStyle?: CSSProperties }>`
   resize: none;
   font-size: 1.5rem;
   line-height: 2rem;
@@ -9,6 +9,7 @@ const StyledTextarea = styled.textarea`
   border: ${({ theme }) => `0.063rem solid ${theme.colors.border}`};
   padding: 0.5rem 0.9rem;
   color: ${({ theme }) => theme.colors.primaryText};
+  ${(props) => ({ ...props.customStyle })}
 `;
 
 export { StyledTextarea };
