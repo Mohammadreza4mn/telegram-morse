@@ -1,6 +1,6 @@
 import { FC, useEffect, useState, useMemo, useContext } from "react";
 import type { ITelegramContext, ITelegramProvider } from "./interface";
-import { TelegramContext } from "./context";
+import TelegramContext from "./context";
 import Spinner from "components/spinner";
 
 const useTelegram = () => {
@@ -20,12 +20,18 @@ const TelegramProvider: FC<ITelegramProvider> = ({ children }) => {
     const app = (window as any).Telegram?.WebApp;
 
     if (app) {
+      console.log("🚀 ~ useEffect ~ app:", app);
       app.ready();
       setWebApp(app);
     }
   }, []);
 
-  const value = useMemo(() => webApp, [webApp]);
+  const value = useMemo(() => {
+    console.log("🚀 ~ useMemo ~ app:", webApp);
+    return webApp;
+  }, [webApp]);
+
+  console.log("🚀 ~ TelegramProvider ~ app:", webApp);
 
   return (
     <TelegramContext.Provider value={value}>

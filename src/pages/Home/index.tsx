@@ -1,15 +1,23 @@
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 import Textarea from "components/input/Textarea";
 import morseTable from "constants/morseTable";
 import { Container, ButtonSwap, TextareaWrap, TitleWrap } from "./styled";
 import type { TTranslateMode } from "./interface";
+import { useTelegram } from "context/telegram";
 
 function Home() {
   const [morseCode, setMorseCode] = useState("");
   const [text, setText] = useState("");
+  const webApp = useTelegram();
 
   const [translateMode, setTranslateMode] =
     useState<TTranslateMode>("textToMorse");
+
+  useEffect(() => {
+    console.log("🚀 ~ Home,useEffect ~ webApp:", webApp);
+  }, []);
+
+  console.log("🚀 ~ Home,body ~ webApp:", webApp);
 
   const handleTranslateTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
     target,
