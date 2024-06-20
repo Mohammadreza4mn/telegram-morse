@@ -4,8 +4,8 @@ import { StyledSpinner, Container } from "./styled";
 function Spinner({ text }: ISpinner) {
   return (
     <Container>
-      <StyledSpinner />
       {!!text && <b>{text}</b>}
+      <StyledSpinner />
     </Container>
   );
 }

@@ -13,12 +13,14 @@ const Container = styled.div`
 
   b {
     color: #2e4392;
+    font-size: 1.5rem;
   }
 `;
 
 const StyledSpinner = styled(Spinner)`
   stroke: #24a1de;
-  font-size: 4rem;
+  width: 3rem;
+  height: 3rem;
 `;
 
 export { StyledSpinner, Container };
