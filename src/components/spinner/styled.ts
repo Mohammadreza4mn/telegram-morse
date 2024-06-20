@@ -4,7 +4,7 @@ import { ReactComponent as Spinner } from "assets/icon/spinner.svg";
 const Container = styled.div`
   background-color: #e6e9ef;
   border-radius: 1rem;
-  height: calc(100dvh - 16px);
+  height: calc(100dvh - 1rem);
   display: flex;
   gap: 0.5rem;
   flex-direction: column;
