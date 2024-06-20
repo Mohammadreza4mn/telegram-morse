@@ -3,4 +3,4 @@ import type { ITelegramContext } from "./interface";
 
 const TelegramContext = createContext<ITelegramContext | null>(null);
 
-export { TelegramContext };
+export default TelegramContext;
