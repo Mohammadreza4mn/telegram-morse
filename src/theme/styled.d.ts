@@ -8,7 +8,10 @@ declare module "styled-components" {
       backgroundColor: string;
       border: string;
       hoverBackgroundColor: string;
+      primaryBtn: string;
+      secondaryBtn: string;
+      errorBtn: string;
     };
-    mode: "dark" | "light";
+    viewportHeight: string;
   }
 }
