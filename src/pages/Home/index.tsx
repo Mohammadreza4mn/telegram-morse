@@ -1,9 +1,15 @@
 import { ChangeEventHandler, useEffect, useState } from "react";
 import Textarea from "components/input/Textarea";
-import morseTable from "constants/morseTable";
-import { Container, ButtonSwap, TextareaWrap, TitleWrap } from "./styled";
+import { ButtonWrap, Container, TextareaWrap, TitleWrap } from "./styled";
 import type { TTranslateMode } from "./interface";
 import { useTelegram } from "context/telegram";
+import { translateMorseToText, translateTextToMorse } from "./helper";
+import { translateDefaultMode } from "./constants";
+import Button from "components/Button";
+import { ReactComponent as Swap } from "assets/icon/swap.svg";
+import { ReactComponent as Clear } from "assets/icon/clear.svg";
+import { ReactComponent as Paste } from "assets/icon/paste.svg";
+import { ReactComponent as Copy } from "assets/icon/copy.svg";
 
 function Home() {
   const [morseCode, setMorseCode] = useState("");
@@ -11,45 +17,23 @@ function Home() {
   const webApp = useTelegram();
 
   const [translateMode, setTranslateMode] =
-    useState<TTranslateMode>("textToMorse");
-
-  useEffect(() => {
-    console.log("🚀 ~ Home,useEffect ~ webApp:", webApp);
-  }, []);
+    useState<TTranslateMode>(translateDefaultMode);
 
   console.log("🚀 ~ Home,body ~ webApp:", webApp);
 
-  const handleTranslateTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
+  const handleTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
     target,
   }) => {
-    const textArray = target.value.toLocaleUpperCase().split("");
-
-    const morseCode = textArray.reduce(
-      (accumulator, currentValue) =>
-        accumulator + `${morseTable[currentValue] || "/"} `,
-      ""
-    );
+    const morseCode = translateTextToMorse(target.value);
 
     setText(target.value);
     setMorseCode(morseCode);
   };
 
-  const handleTranslateMorseToText: ChangeEventHandler<HTMLTextAreaElement> = ({
+  const handleMorseToText: ChangeEventHandler<HTMLTextAreaElement> = ({
     target,
   }) => {
-    const codeArray = target.value.trim().split(" ");
-
-    const morseTableReverse = Object.fromEntries(
-      Object.entries(morseTable)
-        .filter(([key]) => key !== "\n")
-        .map((item) => item.reverse())
-    );
-
-    const text = codeArray.reduce(
-      (accumulator, currentValue) =>
-        accumulator + (morseTableReverse[currentValue] || " "),
-      ""
-    );
+    const text = translateMorseToText(target.value);
 
     setMorseCode(target.value);
     setText(text);
@@ -57,41 +41,115 @@ function Home() {
 
   const handleSwapTranslateMode = () =>
     setTranslateMode((previousState) =>
-      previousState === "morseToText" ? "textToMorse" : "morseToText"
+      previousState === translateDefaultMode ? "morseToText" : "textToMorse"
     );
+
+  const handleCopy = () => {
+    navigator.clipboard
+      .writeText(translateMode === translateDefaultMode ? morseCode : text)
+      .then(() => webApp.showAlert("Text copied to clipboard"))
+      .catch((err) =>
+        webApp.showAlert(`Failed to copy text: ${JSON.stringify(err)}`)
+      );
+  };
+
+  const handlePaste = () =>
+    navigator.clipboard
+      .readText()
+      .then((value) => {
+        if (translateMode === translateDefaultMode) {
+          const morseCode = translateTextToMorse(value);
+
+          setText(value);
+          setMorseCode(morseCode);
+        } else {
+          const text = translateMorseToText(value);
+
+          setText(text);
+          setMorseCode(value);
+        }
+      })
+      .catch((err) =>
+        webApp.showAlert(
+          `Failed to read clipboard contents: ${JSON.stringify(err)}`
+        )
+      );
+
+  const handleClearTextarea = () => {
+    setText("");
+    setMorseCode("");
+  };
+
+  useEffect(() => {
+    console.log("🚀 ~ Home,useEffect ~ webApp:", webApp);
+
+    const welcomeMessage = `Hello dear ${webApp.username}; Welcome to Morse Code Translator. I hope you will convert  pretty messages into Morse code and send them to your cool friends.`;
+    const morseCode = translateTextToMorse(welcomeMessage);
+
+    setText(welcomeMessage);
+    setMorseCode(morseCode);
+  }, [webApp]);
 
   return (
     <Container>
       <TitleWrap
-        direction={translateMode === "textToMorse" ? "row" : "row-reverse"}
+        direction={
+          translateMode === translateDefaultMode ? "row" : "row-reverse"
+        }
       >
         <strong>Text</strong>
-        <ButtonSwap
+        <Button
           className="titleWrap__button"
+          title="swap translate mode"
+          color="primaryText"
           onClick={handleSwapTranslateMode}
-        />
+        >
+          <Swap />
+        </Button>
         <strong>Morse</strong>
       </TitleWrap>
 
       <TextareaWrap
         direction={
-          translateMode === "textToMorse" ? "column" : "column-reverse"
+          translateMode === translateDefaultMode ? "column" : "column-reverse"
         }
       >
         <Textarea
           rows={8}
           name="text"
+          customStyle={{
+            textTransform: "capitalize",
+          }}
           autoFocus
           value={text}
-          onChange={handleTranslateTextToMorse}
-          disabled={translateMode === "morseToText"}
+          onChange={handleTextToMorse}
+          disabled={translateMode !== translateDefaultMode}
         />
+
+        <Button
+          className="textareaWrap__btn--clear"
+          title="clear input"
+          color="errorBtn"
+          onClick={handleClearTextarea}
+        >
+          <Clear />
+        </Button>
+
+        <ButtonWrap>
+          <Button title="copy" color="primaryBtn" onClick={handleCopy}>
+            <Copy />
+          </Button>
+          <Button title="paste" color="secondaryBtn" onClick={handlePaste}>
+            <Paste />
+          </Button>
+        </ButtonWrap>
+
         <Textarea
           rows={8}
           name="morse"
           value={morseCode}
-          onChange={handleTranslateMorseToText}
-          disabled={translateMode === "textToMorse"}
+          onChange={handleMorseToText}
+          disabled={translateMode === translateDefaultMode}
         />
       </TextareaWrap>
     </Container>

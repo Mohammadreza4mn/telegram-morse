@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import { ReactComponent as Swap } from "assets/icon/swap.svg";
 
 const Container = styled.main`
   display: grid;
   gap: 1rem;
   margin-inline: 1rem;
-  height: 100dvh;
+  height: ${({ theme }) => theme.viewportHeight};
 `;
 
 const TextareaWrap = styled.section<{
@@ -14,7 +13,18 @@ const TextareaWrap = styled.section<{
   display: flex;
   height: fit-content;
   gap: 0.5rem;
+  position: relative;
   flex-direction: ${({ direction }) => direction};
+
+  .textareaWrap__btn--clear {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  textarea {
+    padding: 0.5rem 3.375rem 0.5rem 0.9rem;
+  }
 `;
 
 const TitleWrap = styled.section<{
@@ -36,22 +46,18 @@ const TitleWrap = styled.section<{
 
   .titleWrap__button {
     position: absolute;
-    bottom: 0;
-    left: calc(50% - 1.25rem);
+    bottom: 0.125rem;
+    left: calc(50% - 1.188rem);
   }
 `;
 
-const ButtonSwap = styled(Swap)`
-  width: 1.2rem;
-  height: 1.2rem;
-  padding: 0.65rem;
-  cursor: pointer;
-  fill: ${({ theme }) => theme.colors.primaryText};
-  border-radius: calc(infinity * 1px);
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.hoverBackgroundColor};
-  }
+const ButtonWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
 `;
 
-export { Container, ButtonSwap, TextareaWrap, TitleWrap };
+export { Container, TextareaWrap, TitleWrap, ButtonWrap };
