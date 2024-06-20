@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useMemo, useContext } from "react";
 import type { ITelegramContext, ITelegramProvider } from "./interface";
 import TelegramContext from "./context";
-import Spinner from "components/spinner";
+import Spinner from "components/Spinner";
 
 const useTelegram = () => {
   const context = useContext(TelegramContext);
@@ -22,7 +22,11 @@ const TelegramProvider: FC<ITelegramProvider> = ({ children }) => {
     if (app) {
       console.log("🚀 ~ useEffect ~ app:", app);
       app.ready();
-      setWebApp(app);
+      const userData = app.initDataUnsafe.user;
+      setWebApp({
+        username: userData.username || userData.first_name,
+        ...app,
+      });
     }
   }, []);
 
