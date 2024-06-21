@@ -44,39 +44,41 @@ function Home() {
       previousState === translateDefaultMode ? "morseToText" : "textToMorse"
     );
 
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(
-        translateMode === translateDefaultMode ? morseCode : text
-      );
+  const handleCopy = async () =>
+    setTimeout(async () => {
+      try {
+        await navigator.clipboard.writeText(
+          translateMode === translateDefaultMode ? morseCode : text
+        );
 
-      webApp.showAlert("Text copied to clipboard");
-    } catch (error) {
-      webApp.showAlert(`Failed to copy text: ${JSON.stringify(error)}`);
-    }
-  };
-
-  const handlePaste = async () => {
-    try {
-      const value = await navigator.clipboard.readText();
-
-      if (translateMode === translateDefaultMode) {
-        const morseCode = translateTextToMorse(value);
-
-        setText(value);
-        setMorseCode(morseCode);
-      } else {
-        const text = translateMorseToText(value);
-
-        setText(text);
-        setMorseCode(value);
+        webApp.showAlert("Text copied to clipboard");
+      } catch (error) {
+        webApp.showAlert(`Failed to copy text: ${JSON.stringify(error)}`);
       }
-    } catch (error) {
-      webApp.showAlert(
-        `Failed to read clipboard contents: ${JSON.stringify(error)}`
-      );
-    }
-  };
+    }, 1000);
+
+  const handlePaste = async () =>
+    setTimeout(async () => {
+      try {
+        const value = await navigator.clipboard.readText();
+
+        if (translateMode === translateDefaultMode) {
+          const morseCode = translateTextToMorse(value);
+
+          setText(value);
+          setMorseCode(morseCode);
+        } else {
+          const text = translateMorseToText(value);
+
+          setText(text);
+          setMorseCode(value);
+        }
+      } catch (error) {
+        webApp.showAlert(
+          `Failed to read clipboard contents: ${JSON.stringify(error)}`
+        );
+      }
+    }, 1000);
 
   const handleClearTextarea = () => {
     setText("");
