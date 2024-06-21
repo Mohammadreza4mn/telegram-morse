@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.js": "/telegram-morse/static/js/main.96feaa59.js",
+    "main.js": "/telegram-morse/static/js/main.67daabd7.js",
     "static/media/copy.svg": "/telegram-morse/static/media/copy.51b2e1ac8ab8ef0f7f63ddb23ecda6b9.svg",
     "static/media/spinner.svg": "/telegram-morse/static/media/spinner.5a87333a5f6085fb42fd042125752b68.svg",
     "index.html": "/telegram-morse/index.html",
     "static/media/swap.svg": "/telegram-morse/static/media/swap.c404325f9c22d66c1e38787167ac705f.svg",
     "static/media/paste.svg": "/telegram-morse/static/media/paste.269361018289192bed7496706129dbc0.svg",
     "static/media/clear.svg": "/telegram-morse/static/media/clear.7d9415609ca3d89aec7ca3a3226f6094.svg",
-    "main.96feaa59.js.map": "/telegram-morse/static/js/main.96feaa59.js.map"
+    "main.67daabd7.js.map": "/telegram-morse/static/js/main.67daabd7.js.map"
   },
   "entrypoints": [
-    "static/js/main.96feaa59.js"
+    "static/js/main.67daabd7.js"
   ]
 }
