@@ -44,50 +44,67 @@ function Home() {
       previousState === translateDefaultMode ? "morseToText" : "textToMorse"
     );
 
-  const handleCopy = () => {
-    navigator.clipboard
-      .writeText(translateMode === translateDefaultMode ? morseCode : text)
-      .then(() => webApp.showAlert("Text copied to clipboard"))
-      .catch((err) =>
-        webApp.showAlert(`Failed to copy text: ${JSON.stringify(err)}`)
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        translateMode === translateDefaultMode ? morseCode : text
       );
+
+      webApp.showAlert("Text copied to clipboard");
+    } catch (error) {
+      webApp.showAlert(`Failed to copy text: ${JSON.stringify(error)}`);
+    }
   };
 
-  const handlePaste = () =>
-    navigator.clipboard
-      .readText()
-      .then((value) => {
-        if (translateMode === translateDefaultMode) {
-          const morseCode = translateTextToMorse(value);
+  const handlePaste = async () => {
+    try {
+      const value = await navigator.clipboard.readText();
 
-          setText(value);
-          setMorseCode(morseCode);
-        } else {
-          const text = translateMorseToText(value);
+      if (translateMode === translateDefaultMode) {
+        const morseCode = translateTextToMorse(value);
 
-          setText(text);
-          setMorseCode(value);
-        }
-      })
-      .catch((err) =>
-        webApp.showAlert(
-          `Failed to read clipboard contents: ${JSON.stringify(err)}`
-        )
+        setText(value);
+        setMorseCode(morseCode);
+      } else {
+        const text = translateMorseToText(value);
+
+        setText(text);
+        setMorseCode(value);
+      }
+    } catch (error) {
+      webApp.showAlert(
+        `Failed to read clipboard contents: ${JSON.stringify(error)}`
       );
+    }
+  };
 
   const handleClearTextarea = () => {
     setText("");
     setMorseCode("");
   };
 
+  const handleCopyAndCloseApp = async () => {
+    await handleCopy();
+    webApp.close();
+  };
+
   useEffect(() => {
     console.log("🚀 ~ Home,useEffect ~ webApp:", webApp);
+
+    webApp.expand();
 
     const welcomeMessage = `Hello dear ${webApp.username}; Welcome to Morse Code Translator. I hope you will convert  pretty messages into Morse code and send them to your cool friends.`;
     const morseCode = translateTextToMorse(welcomeMessage);
 
     setText(welcomeMessage);
     setMorseCode(morseCode);
+
+    webApp.onEvent("mainButtonClicked", handleCopyAndCloseApp);
+
+    webApp.MainButton.setParams({
+      text: "Close App And Copy Value",
+      is_visible: true,
+    });
   }, [webApp]);
 
   return (
@@ -101,7 +118,7 @@ function Home() {
         <Button
           className="titleWrap__button"
           title="swap translate mode"
-          color="primaryText"
+          color="secondaryText"
           onClick={handleSwapTranslateMode}
         >
           <Swap />
