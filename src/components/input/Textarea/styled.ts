@@ -2,6 +2,7 @@ import styled, { CSSProperties } from "styled-components";
 
 const StyledTextarea = styled.textarea<{ customStyle?: CSSProperties }>`
   resize: none;
+  overflow-y: scroll;
   font-size: 1.5rem;
   line-height: 2rem;
   white-space: pre-wrap;
