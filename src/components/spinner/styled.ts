@@ -13,7 +13,8 @@ const Container = styled.div`
 
   b {
     color: #2e4392;
-    font-size: 1.5rem;
+    font-size: 1.063rem;
+    line-height: 0.75rem;
   }
 `;
 

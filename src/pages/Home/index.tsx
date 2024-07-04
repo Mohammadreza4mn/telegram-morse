@@ -100,7 +100,6 @@ function Home() {
         <strong>Text</strong>
         <ButtonSwap
           title="swap translate mode"
-          color="secondaryText"
           onClick={handleSwapTranslateMode}
         >
           <Swap />
@@ -127,13 +126,13 @@ function Home() {
 
         <ButtonClear
           title="clear input"
-          color="errorBtn"
+          color="errorColor"
           onClick={handleClearTextarea}
         >
           <Clear />
         </ButtonClear>
 
-        <ButtonCopy title="copy" color="primaryBtn" onClick={handleCopy}>
+        <ButtonCopy title="copy" color="successColor" onClick={handleCopy}>
           <Copy />
         </ButtonCopy>
 

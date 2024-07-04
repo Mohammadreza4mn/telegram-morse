@@ -3,7 +3,7 @@ import type { DefaultTheme } from "styled-components";
 
 interface IButton extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  color: TColor;
+  color?: TColor;
 }
 
 type TColor = keyof DefaultTheme["colors"];

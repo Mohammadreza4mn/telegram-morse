@@ -30,11 +30,11 @@ const TitleWrap = styled.section<{
   align-self: flex-end;
   flex-direction: ${({ direction }) => direction};
   position: relative;
-
+  height: 2.75rem;
+  align-items: center;
   strong {
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 2.25rem;
+    font-size: 1.063rem;
+    line-height: 0.75rem;
     color: ${({ theme }) => theme.colors.secondaryText};
     user-select: none;
   }
@@ -42,8 +42,7 @@ const TitleWrap = styled.section<{
 
 const ButtonSwap = styled(Button)`
   position: absolute;
-  bottom: 0.125rem;
-  left: calc(50% - 1.188rem);
+  left: calc(50% - 1.375rem);
 `;
 
 const ButtonCopy = styled(Button)`
