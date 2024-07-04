@@ -8,7 +8,6 @@ const theme: DefaultTheme = {
     border: "var(--tg-theme-subtitle-text-color)",
     hoverBackgroundColor: "var(--tg-theme-secondary-bg-color)",
     errorBtn: "var(--tg-theme-destructive-text-color)",
-    secondaryBtn: "#f8a917",
     primaryBtn: "#31b545",
   },
   viewportHeight: "var(--tg-viewport-stable-height)",
