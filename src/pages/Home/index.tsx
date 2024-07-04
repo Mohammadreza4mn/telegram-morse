@@ -1,14 +1,19 @@
 import { ChangeEventHandler, useEffect, useState } from "react";
-import Textarea from "components/input/Textarea";
-import { ButtonWrap, Container, TextareaWrap, TitleWrap } from "./styled";
+import {
+  ButtonCopy,
+  Container,
+  TextareaWrap,
+  TitleWrap,
+  ButtonSwap,
+  ButtonClear,
+} from "./styled";
 import type { TTranslateMode } from "./interface";
 import { useTelegram } from "context/telegram";
 import { translateMorseToText, translateTextToMorse } from "./helper";
 import { translateDefaultMode } from "./constants";
-import Button from "components/Button";
+import { Textarea } from "components";
 import { ReactComponent as Swap } from "assets/icon/swap.svg";
 import { ReactComponent as Clear } from "assets/icon/clear.svg";
-import { ReactComponent as Paste } from "assets/icon/paste.svg";
 import { ReactComponent as Copy } from "assets/icon/copy.svg";
 
 function Home() {
@@ -44,41 +49,17 @@ function Home() {
       previousState === translateDefaultMode ? "morseToText" : "textToMorse"
     );
 
-  const handleCopy = async () =>
-    setTimeout(async () => {
-      try {
-        await navigator.clipboard.writeText(
-          translateMode === translateDefaultMode ? morseCode : text
-        );
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        translateMode === translateDefaultMode ? morseCode : text
+      );
 
-        webApp.showAlert("Text copied to clipboard");
-      } catch (error) {
-        webApp.showAlert(`Failed to copy text: ${JSON.stringify(error)}`);
-      }
-    }, 1000);
-
-  const handlePaste = async () =>
-    setTimeout(async () => {
-      try {
-        const value = await navigator.clipboard.readText();
-
-        if (translateMode === translateDefaultMode) {
-          const morseCode = translateTextToMorse(value);
-
-          setText(value);
-          setMorseCode(morseCode);
-        } else {
-          const text = translateMorseToText(value);
-
-          setText(text);
-          setMorseCode(value);
-        }
-      } catch (error) {
-        webApp.showAlert(
-          `Failed to read clipboard contents: ${JSON.stringify(error)}`
-        );
-      }
-    }, 1000);
+      webApp.showAlert("Text copied to clipboard");
+    } catch (error) {
+      webApp.showAlert(`Failed to copy text: ${JSON.stringify(error)}`);
+    }
+  };
 
   const handleClearTextarea = () => {
     setText("");
@@ -117,14 +98,13 @@ function Home() {
         }
       >
         <strong>Text</strong>
-        <Button
-          className="titleWrap__button"
+        <ButtonSwap
           title="swap translate mode"
           color="secondaryText"
           onClick={handleSwapTranslateMode}
         >
           <Swap />
-        </Button>
+        </ButtonSwap>
         <strong>Morse</strong>
       </TitleWrap>
 
@@ -145,23 +125,17 @@ function Home() {
           disabled={translateMode !== translateDefaultMode}
         />
 
-        <Button
-          className="textareaWrap__btn--clear"
+        <ButtonClear
           title="clear input"
           color="errorBtn"
           onClick={handleClearTextarea}
         >
           <Clear />
-        </Button>
+        </ButtonClear>
 
-        <ButtonWrap>
-          <Button title="copy" color="primaryBtn" onClick={handleCopy}>
-            <Copy />
-          </Button>
-          <Button title="paste" color="secondaryBtn" onClick={handlePaste}>
-            <Paste />
-          </Button>
-        </ButtonWrap>
+        <ButtonCopy title="copy" color="primaryBtn" onClick={handleCopy}>
+          <Copy />
+        </ButtonCopy>
 
         <Textarea
           rows={8}

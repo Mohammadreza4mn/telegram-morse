@@ -1,3 +1,4 @@
+import { Button } from "components";
 import styled from "styled-components";
 
 const Container = styled.main`
@@ -15,12 +16,6 @@ const TextareaWrap = styled.section<{
   gap: 0.5rem;
   position: relative;
   flex-direction: ${({ direction }) => direction};
-
-  .textareaWrap__btn--clear {
-    position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-  }
 
   textarea {
     padding: 0.5rem 3.375rem 0.5rem 0.9rem;
@@ -43,21 +38,31 @@ const TitleWrap = styled.section<{
     color: ${({ theme }) => theme.colors.secondaryText};
     user-select: none;
   }
-
-  .titleWrap__button {
-    position: absolute;
-    bottom: 0.125rem;
-    left: calc(50% - 1.188rem);
-  }
 `;
 
-const ButtonWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+const ButtonSwap = styled(Button)`
+  position: absolute;
+  bottom: 0.125rem;
+  left: calc(50% - 1.188rem);
+`;
+
+const ButtonCopy = styled(Button)`
   position: absolute;
   bottom: 0.5rem;
   right: 0.5rem;
 `;
 
-export { Container, TextareaWrap, TitleWrap, ButtonWrap };
+const ButtonClear = styled(Button)`
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+`;
+
+export {
+  Container,
+  TextareaWrap,
+  TitleWrap,
+  ButtonCopy,
+  ButtonSwap,
+  ButtonClear,
+};
