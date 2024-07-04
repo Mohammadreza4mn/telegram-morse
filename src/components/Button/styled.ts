@@ -17,8 +17,11 @@ const StyledButton = styled.button<{ color?: TColor }>`
     fill: ${({ theme }) => theme.colors.buttonTextColor};
   }
 
-  &:hover {
-    filter: brightness(0.7);
+  &:active {
+    background-color: ${(props) =>
+      `color-mix(in srgb, ${
+        props.theme.colors[props.color || "buttonBg"]
+      } 60%, ${props.theme.colors.buttonTextColor})`};
   }
 `;
 
