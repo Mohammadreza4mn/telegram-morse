@@ -1,7 +1,7 @@
 import { FC, useEffect, useState, useMemo, useContext } from "react";
 import type { ITelegramContext, ITelegramProvider } from "./interface";
 import TelegramContext from "./context";
-import Spinner from "components/Spinner";
+import { Spinner } from "components";
 
 const useTelegram = () => {
   const context = useContext(TelegramContext);
