@@ -4,12 +4,11 @@ const GlobalStyles = createGlobalStyle`
     body {
         margin: unset;
         padding: unset;
+        background-color: ${({ theme }) => theme.colors.secondaryBg};
+        font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     }
     * {
         transition: 0.3s ease-out;
-        font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
-        background-color: ${({ theme }) => theme.colors.backgroundColor};
-        outline: none;
     }
 `;
 
