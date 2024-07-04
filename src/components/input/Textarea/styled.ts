@@ -1,6 +1,8 @@
 import styled, { CSSProperties } from "styled-components";
 
-const StyledTextarea = styled.textarea<{ customStyle?: CSSProperties }>`
+const StyledTextarea = styled.textarea.withConfig({
+  shouldForwardProp: (prop) => !["customStyle"].includes(prop),
+})<{ customStyle?: CSSProperties }>`
   resize: none;
   font-size: 1.063rem;
   line-height: 1.313rem;
