@@ -9,7 +9,6 @@ declare module "styled-components" {
       border: string;
       hoverBackgroundColor: string;
       primaryBtn: string;
-      secondaryBtn: string;
       errorBtn: string;
     };
     viewportHeight: string;
