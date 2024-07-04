@@ -51,10 +51,6 @@ function Home() {
 
   const handleCopy = async () => {
     try {
-      const hasValue = !!(morseCode || text);
-
-      if (!hasValue) return;
-
       await navigator.clipboard.writeText(
         translateMode === translateDefaultMode ? morseCode : text
       );
