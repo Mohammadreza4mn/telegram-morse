@@ -117,7 +117,7 @@ function Home() {
         }
       >
         <Textarea
-          rows={8}
+          rows={6}
           name="text"
           customStyle={{
             textTransform: "capitalize",
@@ -141,7 +141,7 @@ function Home() {
         </ButtonCopy>
 
         <Textarea
-          rows={8}
+          rows={6}
           name="morse"
           value={morseCode}
           onChange={handleMorseToText}

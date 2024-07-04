@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Container = styled.main`
   display: grid;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-inline: 1rem;
   height: ${({ theme }) => theme.viewportHeight};
 `;
