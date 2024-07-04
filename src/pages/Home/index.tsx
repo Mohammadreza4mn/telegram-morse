@@ -66,10 +66,7 @@ function Home() {
     setMorseCode("");
   };
 
-  const handleCopyAndCloseApp = async () => {
-    await handleCopy();
-    webApp.close();
-  };
+  const handleCloseApp = () => webApp.close();
 
   useEffect(() => {
     console.log("🚀 ~ Home,useEffect ~ webApp:", webApp);
@@ -82,10 +79,10 @@ function Home() {
     setText(welcomeMessage);
     setMorseCode(morseCode);
 
-    webApp.onEvent("mainButtonClicked", handleCopyAndCloseApp);
+    webApp.onEvent("mainButtonClicked", handleCloseApp);
 
     webApp.MainButton.setParams({
-      text: "Close App And Copy Value",
+      text: "Close App",
       is_visible: true,
     });
   }, [webApp]);
