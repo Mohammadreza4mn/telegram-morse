@@ -3,13 +3,15 @@ import "styled-components";
 declare module "styled-components" {
   export interface DefaultTheme extends customTheme {
     colors: {
+      secondaryBg: string;
       primaryText: string;
+      buttonBg: string;
+      buttonTextColor: string;
+      primaryBg: string;
       secondaryText: string;
-      backgroundColor: string;
       border: string;
-      hoverBackgroundColor: string;
-      primaryBtn: string;
-      errorBtn: string;
+      successColor: string;
+      errorColor: string;
     };
     viewportHeight: string;
   }
