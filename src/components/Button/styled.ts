@@ -8,6 +8,7 @@ const StyledButton = styled.button<{ color?: TColor }>`
   height: 2.75rem;
   border-radius: 0.625rem;
   border: none;
+  outline: none;
   padding: 0.25rem;
   cursor: pointer;
   background-color: ${(props) => props.theme.colors[props.color || "buttonBg"]};
