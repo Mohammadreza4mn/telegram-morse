@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, useMemo, useContext } from "react";
+import { FC, useEffect, useState, useContext } from "react";
 import type { ITelegramContext, ITelegramProvider } from "./interface";
 import TelegramContext from "./context";
 import { Spinner } from "components";
@@ -20,26 +20,23 @@ const TelegramProvider: FC<ITelegramProvider> = ({ children }) => {
     const app = (window as any).Telegram?.WebApp;
 
     if (app) {
-      console.log("🚀 ~ useEffect ~ app:", app);
       app.ready();
+
       const userData = app.initDataUnsafe.user;
       setWebApp({
         username: userData.username || userData.first_name,
-        ...app,
+        close: app.close,
+        expand: app.expand,
+        MainButton: { setParams: app.MainButton.setParams },
+        onEvent: app.onEvent,
+        showAlert: app.showAlert,
       });
     }
   }, []);
 
-  const value = useMemo(() => {
-    console.log("🚀 ~ useMemo ~ app:", webApp);
-    return webApp;
-  }, [webApp]);
-
-  console.log("🚀 ~ TelegramProvider ~ app:", webApp);
-
   return (
-    <TelegramContext.Provider value={value}>
-      {value ? children : <Spinner text="Waiting connect to Telegram" />}
+    <TelegramContext.Provider value={webApp}>
+      {webApp ? children : <Spinner text="Waiting connect to Telegram" />}
     </TelegramContext.Provider>
   );
 };
