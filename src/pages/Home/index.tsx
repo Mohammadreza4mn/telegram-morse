@@ -48,14 +48,17 @@ function Home() {
     );
 
   const handleCopy = async () => {
+    const entity =
+      translateMode === translateDefaultMode ? "Morse code" : "Text";
+
     try {
       await navigator.clipboard.writeText(
         translateMode === translateDefaultMode ? morseCode : text
       );
 
-      webApp.showAlert("Text copied to clipboard");
+      webApp.showAlert(`${entity} copied to clipboard`);
     } catch (error) {
-      webApp.showAlert(`Failed to copy text: ${JSON.stringify(error)}`);
+      webApp.showAlert(`Failed to copy ${entity}: ${JSON.stringify(error)}`);
     }
   };
 
