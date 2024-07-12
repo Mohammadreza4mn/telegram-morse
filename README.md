@@ -1,8 +1,10 @@
 # Telegram Morse 💬
 
 This app is developed based on the structure of [Telegram Mini Apps](https://core.telegram.org/bots/webapps) and is implemented for use on the Telegram bot.<br />
-🚨✉🚨 Your message will not be saved or copied anywhere during the translation process.<br />
-⛔ The app does not work outside the Telegram environment.<br />
+
+🔐 Your message will not be saved or copied anywhere during the translation process 🔐<br />
+
+⛔ The app does not work outside the Telegram environment ⛔<br />
 
 ## Usage
 
