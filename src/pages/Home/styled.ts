@@ -2,7 +2,9 @@ import { Button, Textarea } from "components";
 import styled from "styled-components";
 
 const Container = styled.main`
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: 0.75rem;
   margin-inline: 1rem;
   height: ${({ theme }) => theme.viewportHeight};
@@ -12,7 +14,6 @@ const TextareaWrap = styled.section<{
   direction: "column" | "column-reverse";
 }>`
   display: flex;
-  height: fit-content;
   gap: 0.5rem;
   position: relative;
   flex-direction: ${({ direction }) => direction};
@@ -23,7 +24,7 @@ const TitleWrap = styled.section<{
 }>`
   display: flex;
   justify-content: space-between;
-  align-self: flex-end;
+  width: 100%;
   flex-direction: ${({ direction }) => direction};
   position: relative;
   height: 2.75rem;
