@@ -1,114 +1,59 @@
-import { ChangeEventHandler, useEffect, useState } from "react";
-import {
-  ButtonCopy,
-  Container,
-  TextareaWrap,
-  TitleWrap,
-  ButtonSwap,
-  ButtonClear,
-  STextarea,
-} from "./styled";
+import { useState } from "react";
+import * as Styled from "./styled";
+import { Checkbox } from "components";
+import { useCopy, useForm } from "./hooks";
 import type { TTranslateMode } from "./interface";
-import { useTelegram } from "context/telegram";
-import { translateMorseToText, translateTextToMorse } from "./helper";
-import { translateDefaultMode } from "./constants";
 import { ReactComponent as Swap } from "assets/icon/swap.svg";
-import { ReactComponent as Clear } from "assets/icon/clear.svg";
 import { ReactComponent as Copy } from "assets/icon/copy.svg";
+import { ReactComponent as Clear } from "assets/icon/clear.svg";
+import { copyrightMessage, translateDefaultMode } from "./constants";
 
 function Home() {
-  const [morseCode, setMorseCode] = useState("");
-  const [text, setText] = useState("");
-  const webApp = useTelegram();
-
   const [translateMode, setTranslateMode] =
     useState<TTranslateMode>(translateDefaultMode);
 
-  const handleTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
-    target,
-  }) => {
-    const morseCode = translateTextToMorse(target.value);
+  const {
+    text,
+    morseCode,
+    handleTextToMorse,
+    handleMorseToText,
+    handleClearTextarea,
+  } = useForm();
 
-    setText(target.value);
-    setMorseCode(morseCode);
-  };
-
-  const handleMorseToText: ChangeEventHandler<HTMLTextAreaElement> = ({
-    target,
-  }) => {
-    const text = translateMorseToText(target.value);
-
-    setMorseCode(target.value);
-    setText(text);
-  };
+  const { handleChecked, handleCopy } = useCopy({
+    text,
+    morseCode,
+    translateMode,
+  });
 
   const handleSwapTranslateMode = () =>
     setTranslateMode((previousState) =>
       previousState === translateDefaultMode ? "morseToText" : "textToMorse"
     );
 
-  const handleCopy = async () => {
-    const entity =
-      translateMode === translateDefaultMode ? "Morse code" : "Text";
-
-    try {
-      await navigator.clipboard.writeText(
-        translateMode === translateDefaultMode ? morseCode : text
-      );
-
-      webApp.showAlert(`${entity} copied to clipboard`);
-    } catch (error) {
-      webApp.showAlert(`Failed to copy ${entity}: ${JSON.stringify(error)}`);
-    }
-  };
-
-  const handleClearTextarea = () => {
-    setText("");
-    setMorseCode("");
-  };
-
-  useEffect(() => {
-    webApp.expand();
-
-    const welcomeMessage = `Hello dear ${webApp.username}; Welcome to Morse Code Translator. I hope you will convert  pretty messages into Morse code and send them to your cool friends.`;
-    const morseCode = translateTextToMorse(welcomeMessage);
-
-    const handleCloseApp = () => webApp.close();
-
-    setText(welcomeMessage);
-    setMorseCode(morseCode);
-
-    webApp.onEvent("mainButtonClicked", handleCloseApp);
-
-    webApp.MainButton.setParams({
-      text: "Close App",
-      is_visible: true,
-    });
-  }, [webApp]);
-
   return (
-    <Container>
-      <TitleWrap
+    <Styled.Container>
+      <Styled.TitleWrap
         direction={
           translateMode === translateDefaultMode ? "row" : "row-reverse"
         }
       >
         <strong>Text</strong>
-        <ButtonSwap
+        <Styled.ButtonSwap
           title="swap translate mode"
           onClick={handleSwapTranslateMode}
         >
           <Swap />
-        </ButtonSwap>
+        </Styled.ButtonSwap>
         <strong>Morse</strong>
-      </TitleWrap>
+      </Styled.TitleWrap>
 
-      <TextareaWrap
+      <Styled.TextareaWrap
         direction={
           translateMode === translateDefaultMode ? "column" : "column-reverse"
         }
       >
-        <STextarea
+        <Styled.STextarea
           rows={6}
           name="text"
           customStyle={{
@@ -120,15 +65,15 @@ function Home() {
           disabled={translateMode !== translateDefaultMode}
         />
 
-        <ButtonClear
+        <Styled.ButtonClear
           title="clear input"
           color="errorColor"
           onClick={handleClearTextarea}
         >
           <Clear />
-        </ButtonClear>
+        </Styled.ButtonClear>
 
-        <STextarea
+        <Styled.STextarea
           rows={6}
           name="morse"
           value={morseCode}
@@ -136,11 +81,21 @@ function Home() {
           disabled={translateMode === translateDefaultMode}
         />
 
-        <ButtonCopy title="copy" color="successColor" onClick={handleCopy}>
+        <Styled.ButtonCopy
+          title="copy"
+          color="successColor"
+          onClick={handleCopy}
+        >
           <Copy />
-        </ButtonCopy>
-      </TextareaWrap>
-    </Container>
+        </Styled.ButtonCopy>
+      </Styled.TextareaWrap>
+
+      <Checkbox
+        label={copyrightMessage}
+        title="add copyright"
+        onChange={handleChecked}
+      />
+    </Styled.Container>
   );
 }
 
