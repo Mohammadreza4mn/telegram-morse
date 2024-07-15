@@ -1,4 +1,5 @@
 import styled, { CSSProperties } from "styled-components";
+import { ReactComponent as Top } from "assets/icon/top.svg";
 
 const StyledTextarea = styled.textarea.withConfig({
   shouldForwardProp: (prop) => !["customStyle"].includes(prop),
@@ -12,7 +13,6 @@ const StyledTextarea = styled.textarea.withConfig({
   border: ${({ theme }) => `0.063rem solid ${theme.colors.border}`};
   padding: 0.5rem 0.9rem;
   color: ${({ theme }) => theme.colors.primaryText};
-  overflow: auto !important;
   background: linear-gradient(
         ${({ theme }) => theme.colors.primaryBg} 30px,
         transparent
@@ -42,4 +42,21 @@ const StyledTextarea = styled.textarea.withConfig({
   ${(props) => ({ ...props.customStyle })}
 `;
 
-export { StyledTextarea };
+const BtnTop = styled(Top)`
+  position: absolute;
+  width: 10rem;
+  height: 1.2rem;
+  left: calc(50% - 5rem);
+  bottom: -0.225rem;
+  stroke: ${({ theme }) => theme.colors.primaryBg};
+  opacity: 0.5;
+  cursor: pointer;
+  filter: invert();
+`;
+
+const Container = styled("main")`
+  display: grid;
+  position: relative;
+`;
+
+export { StyledTextarea, BtnTop, Container };

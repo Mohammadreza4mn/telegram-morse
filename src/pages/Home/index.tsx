@@ -6,12 +6,12 @@ import {
   TitleWrap,
   ButtonSwap,
   ButtonClear,
+  STextarea,
 } from "./styled";
 import type { TTranslateMode } from "./interface";
 import { useTelegram } from "context/telegram";
 import { translateMorseToText, translateTextToMorse } from "./helper";
 import { translateDefaultMode } from "./constants";
-import { Textarea } from "components";
 import { ReactComponent as Swap } from "assets/icon/swap.svg";
 import { ReactComponent as Clear } from "assets/icon/clear.svg";
 import { ReactComponent as Copy } from "assets/icon/copy.svg";
@@ -108,7 +108,7 @@ function Home() {
           translateMode === translateDefaultMode ? "column" : "column-reverse"
         }
       >
-        <Textarea
+        <STextarea
           rows={6}
           name="text"
           customStyle={{
@@ -128,17 +128,17 @@ function Home() {
           <Clear />
         </ButtonClear>
 
-        <ButtonCopy title="copy" color="successColor" onClick={handleCopy}>
-          <Copy />
-        </ButtonCopy>
-
-        <Textarea
+        <STextarea
           rows={6}
           name="morse"
           value={morseCode}
           onChange={handleMorseToText}
           disabled={translateMode === translateDefaultMode}
         />
+
+        <ButtonCopy title="copy" color="successColor" onClick={handleCopy}>
+          <Copy />
+        </ButtonCopy>
       </TextareaWrap>
     </Container>
   );
