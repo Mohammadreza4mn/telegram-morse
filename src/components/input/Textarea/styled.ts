@@ -44,9 +44,9 @@ const StyledTextarea = styled.textarea.withConfig({
 
 const BtnTop = styled(Top)`
   position: absolute;
-  width: 10rem;
+  width: 60%;
   height: 1.2rem;
-  left: calc(50% - 5rem);
+  left: calc(50% - 30%);
   bottom: -0.225rem;
   stroke: ${({ theme }) => theme.colors.primaryBg};
   opacity: 0.5;
