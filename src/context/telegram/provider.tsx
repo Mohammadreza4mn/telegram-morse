@@ -24,19 +24,21 @@ const TelegramProvider: FC<ITelegramProvider> = ({ children }) => {
 
       const userData = app.initDataUnsafe.user;
       setWebApp({
-        username: userData.username || userData.first_name,
+        firstName: userData.first_name,
+        username: userData.username,
         close: app.close,
         expand: app.expand,
         MainButton: { setParams: app.MainButton.setParams },
         onEvent: app.onEvent,
         showAlert: app.showAlert,
+        requestContact: app.requestContact,
       });
     }
   }, []);
 
   return (
     <TelegramContext.Provider value={webApp}>
-      {webApp ? children : <Spinner text="Waiting connect to Telegram" />}
+      {webApp ? children : <Spinner text="waiting connect to Telegram" />}
     </TelegramContext.Provider>
   );
 };

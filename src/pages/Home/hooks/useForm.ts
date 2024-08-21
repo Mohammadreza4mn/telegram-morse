@@ -32,7 +32,7 @@ function useForm() {
   useEffect(() => {
     webApp.expand();
 
-    const welcomeMessage = `Hello dear ${webApp.username}; Welcome to Morse Code Translator. I hope you will convert  pretty messages into Morse code and send them to your cool friends.`;
+    const welcomeMessage = `Hello dear ${webApp.firstName}; Welcome to Morse Code Translator. I hope you will convert  pretty messages into Morse code and send them to your cool friends.`;
     const morseCode = translateTextToMorse(welcomeMessage);
 
     const handleCloseApp = () => webApp.close();
