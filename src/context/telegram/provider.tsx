@@ -32,6 +32,7 @@ const TelegramProvider: FC<ITelegramProvider> = ({ children }) => {
         onEvent: app.onEvent,
         showAlert: app.showAlert,
         requestContact: app.requestContact,
+        showConfirm: app.showConfirm,
       });
     }
   }, []);

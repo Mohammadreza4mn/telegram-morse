@@ -54,7 +54,7 @@ const BtnTop = styled(Top)`
   filter: invert();
 `;
 
-const Container = styled("main")`
+const Container = styled.main`
   display: grid;
   position: relative;
 `;

@@ -14,6 +14,7 @@ interface ITelegramContext {
     status: boolean,
     callback: (res: IRequestContactCallback) => void
   ) => void;
+  showConfirm: (message: string, callback: (status: boolean) => void) => void;
 }
 
 interface IMainButtonParams {
@@ -25,7 +26,6 @@ interface IMainButtonParams {
 }
 
 interface IRequestContactCallback {
-  status: "cancelled" | "sent";
   responseUnsafe: {
     contact: {
       phone_number: string;
