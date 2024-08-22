@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import type { IKnobsContent } from "./interface";
+import type { IKnobsOptions } from "./interface";
 
 const SLabel = styled.label`
   font-size: 1rem;
@@ -38,7 +38,7 @@ const StyledSpan = styled.span`
   z-index: 1;
 `;
 
-const Knobs = styled.div<{ content: IKnobsContent }>`
+const Knobs = styled.div<{ content: IKnobsOptions }>`
   position: absolute;
   inset: 0;
 

@@ -2,12 +2,12 @@ import { InputHTMLAttributes } from "react";
 
 interface ISwitch extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  knobs: IKnobsContent;
+  knobs: IKnobsOptions;
 }
 
-interface IKnobsContent {
+interface IKnobsOptions {
   checked: string;
   unchecked: string;
 }
 
-export type { ISwitch, IKnobsContent };
+export type { ISwitch, IKnobsOptions };
