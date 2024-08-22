@@ -1,6 +1,11 @@
 import { useTelegram } from "context/telegram";
 import { ChangeEventHandler, useEffect, useState } from "react";
-import { translateMorseToText, translateTextToMorse } from "../helper";
+import {
+  decodeRecipientInfo,
+  translateMorseToText,
+  translateTextToMorse,
+} from "../helper";
+import { confirmPrivateMessages, secretKey } from "../constants";
 
 function useForm() {
   const webApp = useTelegram();
@@ -8,22 +13,76 @@ function useForm() {
   const [morseCode, setMorseCode] = useState("");
 
   const handleTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
-    target,
+    target: { value },
   }) => {
-    const morseCode = translateTextToMorse(target.value);
+    const morseCode = translateTextToMorse(value);
 
-    setText(target.value);
+    setText(value);
     setMorseCode(morseCode);
   };
 
   const handleMorseToText: ChangeEventHandler<HTMLTextAreaElement> = ({
-    target,
+    target: { value },
   }) => {
-    const text = translateMorseToText(target.value);
+    if (value.includes(secretKey)) {
+      handleDealingPrivateMessages(value);
+    }
 
-    setMorseCode(target.value);
+    handleSetMorseCode(value);
+  };
+
+  const handleDealingPrivateMessages = (morseCode: string) => {
+    webApp.showConfirm(confirmPrivateMessages, (status) => {
+      if (status) {
+        webApp.requestContact(status, ({ responseUnsafe }) => {
+          if (status) {
+            const { recipientInfo, morseCodeWithoutRecipientInfo } =
+              decodeRecipientInfo(morseCode);
+
+            const isRecipient = [
+              responseUnsafe.contact.phone_number,
+              webApp.username,
+            ].includes(recipientInfo);
+
+            if (isRecipient) {
+              handleSetMorseCode(morseCode, morseCodeWithoutRecipientInfo);
+              return;
+            } else {
+              webApp.showAlert(
+                "This message is not for you and you are not able to read it."
+              );
+              handleSetMorseCodeAndExit(morseCode);
+            }
+          } else {
+            webApp.showAlert(
+              "We do not have access to your phone number and without it we cannot decipher your message."
+            );
+            handleSetMorseCodeAndExit(morseCode);
+          }
+        });
+      } else {
+        handleSetMorseCodeAndExit(morseCode);
+      }
+    });
+  };
+
+  const handleSetMorseCode = (
+    morseCode: string,
+    morseCodeWithoutRecipientInfo?: string
+  ) => {
+    const text = translateMorseToText(
+      morseCodeWithoutRecipientInfo || morseCode
+    );
+
+    setMorseCode(morseCode);
     setText(text);
   };
+
+  const handleSetMorseCodeAndExit = (morseCode: string) => {
+    setMorseCode(morseCode);
+    return;
+  };
+
   const handleClearTextarea = () => {
     setText("");
     setMorseCode("");

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import * as Styled from "./styled";
-import { Checkbox } from "components";
 import { useCopy, useForm } from "./hooks";
 import type { TTranslateMode } from "./interface";
 import { ReactComponent as Swap } from "assets/icon/swap.svg";
 import { ReactComponent as Copy } from "assets/icon/copy.svg";
 import { ReactComponent as Clear } from "assets/icon/clear.svg";
-import { copyrightMessage, translateDefaultMode } from "./constants";
+import { translateDefaultMode } from "./constants";
+import { TranslationSettings } from "./components";
 
 function Home() {
   const [translateMode, setTranslateMode] =
@@ -20,7 +20,12 @@ function Home() {
     handleClearTextarea,
   } = useForm();
 
-  const { handleChecked, handleCopy } = useCopy({
+  const {
+    handleCopy,
+    recipientInfo,
+    handleToggleCopyright,
+    handleSetRecipientInfo,
+  } = useCopy({
     text,
     morseCode,
     translateMode,
@@ -90,10 +95,10 @@ function Home() {
         </Styled.ButtonCopy>
       </Styled.TextareaWrap>
 
-      <Checkbox
-        label={copyrightMessage}
-        title="add copyright"
-        onChange={handleChecked}
+      <TranslationSettings
+        recipientInfo={recipientInfo}
+        handleToggleCopyright={handleToggleCopyright}
+        handleSetRecipientInfo={handleSetRecipientInfo}
       />
     </Styled.Container>
   );
