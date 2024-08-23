@@ -1,4 +1,3 @@
-import { Input } from "components";
 import styled from "styled-components";
 
 const StyledFieldset = styled.fieldset`
@@ -21,7 +20,7 @@ const ContainerInput = styled.div<{ isHidden: boolean }>`
   align-items: center;
   gap: 0.25rem;
   color: ${({ theme }) => theme.colors.primaryText};
-  max-height: ${({ isHidden }) => (isHidden ? 0 : "9.5rem")};
+  max-height: ${({ isHidden }) => (isHidden ? 0 : "8.5rem")};
   overflow: hidden;
   transition: 0.3s ease-in-out;
 `;
@@ -37,12 +36,32 @@ const InputHelper = styled.small`
   color: ${({ theme }) => theme.colors.primaryText};
 `;
 
+const StyledLegend = styled.legend`
+  cursor: pointer;
+`;
+
 const InputExample = styled(InputHelper)`
   align-self: flex-start;
 `;
 
-const StyledInput = styled(Input)`
-  width: 80%;
+const Main = styled.div<{ isHidden: boolean }>`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  max-height: ${({ isHidden }) => (isHidden ? 0 : "16rem")};
+  overflow: hidden;
+  transition: 0.3s ease-in-out;
+`;
+
+const Slogan = styled.b<{ isHidden: boolean }>`
+  cursor: pointer;
+  opacity: ${({ isHidden }) => (isHidden ? 0 : 1)};
+  max-height: ${({ isHidden }) => (isHidden ? 0 : "3rem")};
+  overflow: hidden;
+  transition: 0.4s, max-height 0.8s;
+  transition-timing-function: ease-in-out;
 `;
 
 export {
@@ -51,5 +70,7 @@ export {
   Divider,
   InputHelper,
   InputExample,
-  StyledInput,
+  Main,
+  StyledLegend,
+  Slogan,
 };
