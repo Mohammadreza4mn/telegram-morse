@@ -7,6 +7,7 @@ import { ReactComponent as Copy } from "assets/icon/copy.svg";
 import { ReactComponent as Clear } from "assets/icon/clear.svg";
 import { translateDefaultMode } from "./constants";
 import { TranslationSettings } from "./components";
+import { Spinner } from "components";
 
 function Home() {
   const [translateMode, setTranslateMode] =
@@ -15,6 +16,7 @@ function Home() {
   const {
     text,
     morseCode,
+    isLoading,
     handleTextToMorse,
     handleMorseToText,
     handleClearTextarea,
@@ -38,6 +40,8 @@ function Home() {
 
   return (
     <Styled.Container>
+      {isLoading && <Spinner text="Getting your phone number" />}
+
       <Styled.TitleWrap
         direction={
           translateMode === translateDefaultMode ? "row" : "row-reverse"

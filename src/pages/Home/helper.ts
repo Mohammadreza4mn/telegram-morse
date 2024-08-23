@@ -25,7 +25,7 @@ const translateMorseToText = (morse: string) => {
   const text = codeArray
     .reduce(
       (accumulator, currentValue) =>
-        accumulator + (morseTableReverse[currentValue] || "?"),
+        accumulator + (morseTableReverse[currentValue] || " "),
       ""
     )
     .toLowerCase();

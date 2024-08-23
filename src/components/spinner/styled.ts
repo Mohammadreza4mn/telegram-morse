@@ -2,9 +2,12 @@ import styled from "styled-components";
 import { ReactComponent as Spinner } from "assets/icon/spinner.svg";
 
 const Container = styled.div`
-  background-color: #e6e9ef;
-  border-radius: 1rem;
-  height: calc(100dvh - 1rem);
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  backdrop-filter: blur(0.4rem) grayscale(1);
+  z-index: 2;
   display: flex;
   gap: 0.5rem;
   flex-direction: column;

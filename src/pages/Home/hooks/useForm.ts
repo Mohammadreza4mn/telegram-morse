@@ -11,6 +11,7 @@ function useForm() {
   const webApp = useTelegram();
   const [text, setText] = useState("");
   const [morseCode, setMorseCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleTextToMorse: ChangeEventHandler<HTMLTextAreaElement> = ({
     target: { value },
@@ -36,7 +37,11 @@ function useForm() {
   const handleDealingPrivateMessages = (morseCode: string) => {
     webApp.showConfirm(confirmPrivateMessages, (status) => {
       if (status) {
+        setIsLoading(true);
+
         webApp.requestContact((status, { responseUnsafe }) => {
+          setIsLoading(false);
+
           if (status) {
             const { recipientInfo, morseCodeWithoutRecipientInfo } =
               decodeRecipientInfo(morseCode);
@@ -105,6 +110,7 @@ function useForm() {
   return {
     text,
     morseCode,
+    isLoading,
     handleTextToMorse,
     handleMorseToText,
     handleClearTextarea,

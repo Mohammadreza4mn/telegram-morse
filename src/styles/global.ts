@@ -8,7 +8,6 @@ const GlobalStyles = createGlobalStyle`
         font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
     }
     * {
-        transition: 0.3s ease-out;
         -webkit-tap-highlight-color: transparent;
     }
 `;
