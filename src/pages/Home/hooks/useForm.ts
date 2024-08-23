@@ -36,7 +36,7 @@ function useForm() {
   const handleDealingPrivateMessages = (morseCode: string) => {
     webApp.showConfirm(confirmPrivateMessages, (status) => {
       if (status) {
-        webApp.requestContact(status, ({ responseUnsafe }) => {
+        webApp.requestContact((status, { responseUnsafe }) => {
           if (status) {
             const { recipientInfo, morseCodeWithoutRecipientInfo } =
               decodeRecipientInfo(morseCode);

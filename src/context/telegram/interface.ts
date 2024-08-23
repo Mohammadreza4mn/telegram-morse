@@ -11,8 +11,7 @@ interface ITelegramContext {
     setParams: (params: Partial<IMainButtonParams>) => void;
   };
   requestContact: (
-    status: boolean,
-    callback: (res: IRequestContactCallback) => void
+    callback: (status: boolean, res: IRequestContactCallback) => void
   ) => void;
   showConfirm: (message: string, callback: (status: boolean) => void) => void;
 }
