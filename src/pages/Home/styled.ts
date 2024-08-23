@@ -6,8 +6,7 @@ const Container = styled.main`
   flex-direction: column;
   justify-content: center;
   gap: 0.75rem;
-  margin-inline: 1rem;
-  height: ${({ theme }) => theme.viewportHeight};
+  margin: 1rem;
 `;
 
 const TextareaWrap = styled.section<{

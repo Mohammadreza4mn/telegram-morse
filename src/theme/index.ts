@@ -12,7 +12,6 @@ const theme: DefaultTheme = {
     errorColor: "var(--tg-theme-destructive-text-color)",
     successColor: "#31b545",
   },
-  viewportHeight: "var(--tg-viewport-stable-height)",
 };
 
 export { theme };

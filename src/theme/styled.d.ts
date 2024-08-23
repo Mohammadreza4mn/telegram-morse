@@ -13,6 +13,5 @@ declare module "styled-components" {
       successColor: string;
       errorColor: string;
     };
-    viewportHeight: string;
   }
 }
