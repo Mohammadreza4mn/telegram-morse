@@ -24,11 +24,13 @@ function useForm() {
   const handleMorseToText: ChangeEventHandler<HTMLTextAreaElement> = ({
     target: { value },
   }) => {
-    if (value.includes(secretKey)) {
-      handleDealingPrivateMessages(value);
-    }
+    const isMessagePrivate = value.includes(secretKey);
 
-    handleSetMorseCode(value);
+    if (isMessagePrivate) {
+      handleDealingPrivateMessages(value);
+    } else {
+      handleSetMorseCode(value);
+    }
   };
 
   const handleDealingPrivateMessages = (morseCode: string) => {
@@ -39,48 +41,41 @@ function useForm() {
             const { recipientInfo, morseCodeWithoutRecipientInfo } =
               decodeRecipientInfo(morseCode);
 
-            const isRecipient = [
-              responseUnsafe.contact.phone_number,
-              webApp.username,
-            ].includes(recipientInfo);
+            const phoneNumber = responseUnsafe.contact?.phone_number?.replace(
+              "98",
+              "0"
+            );
+
+            const isRecipient = [phoneNumber, webApp?.username].includes(
+              recipientInfo
+            );
 
             if (isRecipient) {
-              handleSetMorseCode(morseCode, morseCodeWithoutRecipientInfo);
-              return;
+              handleSetMorseCode(morseCodeWithoutRecipientInfo);
             } else {
               webApp.showAlert(
                 "This message is not for you and you are not able to read it."
               );
-              handleSetMorseCodeAndExit(morseCode);
+              setMorseCode("");
             }
           } else {
             webApp.showAlert(
               "We do not have access to your phone number and without it we cannot decipher your message."
             );
-            handleSetMorseCodeAndExit(morseCode);
+            setMorseCode("");
           }
         });
       } else {
-        handleSetMorseCodeAndExit(morseCode);
+        setMorseCode("");
       }
     });
   };
 
-  const handleSetMorseCode = (
-    morseCode: string,
-    morseCodeWithoutRecipientInfo?: string
-  ) => {
-    const text = translateMorseToText(
-      morseCodeWithoutRecipientInfo || morseCode
-    );
+  const handleSetMorseCode = (morseCode: string) => {
+    const text = translateMorseToText(morseCode);
 
     setMorseCode(morseCode);
     setText(text);
-  };
-
-  const handleSetMorseCodeAndExit = (morseCode: string) => {
-    setMorseCode(morseCode);
-    return;
   };
 
   const handleClearTextarea = () => {
