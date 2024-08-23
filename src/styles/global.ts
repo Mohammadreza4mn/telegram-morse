@@ -9,6 +9,7 @@ const GlobalStyles = createGlobalStyle`
     }
     * {
         transition: 0.3s ease-out;
+        -webkit-tap-highlight-color: transparent;
     }
 `;
 
