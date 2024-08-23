@@ -38,6 +38,7 @@ const InputHelper = styled.small`
 
 const StyledLegend = styled.legend`
   cursor: pointer;
+  user-select: none;
 `;
 
 const InputExample = styled(InputHelper)`
@@ -62,6 +63,7 @@ const Slogan = styled.b<{ isHidden: boolean }>`
   overflow: hidden;
   transition: 0.4s, max-height 0.8s;
   transition-timing-function: ease-in-out;
+  user-select: none;
 `;
 
 export {
