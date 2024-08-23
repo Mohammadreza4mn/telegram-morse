@@ -49,7 +49,7 @@ function useCopy({ translateMode, morseCode, text }: IUseCopy) {
       await navigator.clipboard.writeText(
         hasCopyright
           ? `${entity.value}
-🤖translated by @morse_code_translator_bot`
+🤖translated by https://t.me/morse_code_translator_bot`
           : entity.value
       );
 
