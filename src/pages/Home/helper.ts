@@ -53,11 +53,10 @@ const decodeRecipientInfo = (morseCode: string) => {
   );
   arrayMorseCodeRecipient.splice(0, 1);
   arrayMorseCodeRecipient.splice(-1, 1);
-
   const morseCodeRecipient = arrayMorseCodeRecipient.reverse().join(" ");
-
   const recipientInfo = translateMorseToText(morseCodeRecipient);
-  const morseCodeWithoutRecipientInfo = arrayMorseCodeRecipient.join(" ");
+
+  const morseCodeWithoutRecipientInfo = arrayMorseCode.join(" ");
 
   return { recipientInfo, morseCodeWithoutRecipientInfo };
 };
