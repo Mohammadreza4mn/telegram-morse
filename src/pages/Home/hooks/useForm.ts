@@ -1,11 +1,12 @@
 import { useTelegram } from "context/telegram";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import {
-  decodeRecipientInfo,
+  handleMorseCodeDecrypt,
+  removeCopyright,
   translateMorseToText,
   translateTextToMorse,
 } from "../helper";
-import { confirmPrivateMessages, secretKey } from "../constants";
+import { confirmPrivateMessages, publicKey } from "../constants";
 
 function useForm() {
   const webApp = useTelegram();
@@ -25,12 +26,14 @@ function useForm() {
   const handleMorseToText: ChangeEventHandler<HTMLTextAreaElement> = ({
     target: { value },
   }) => {
-    const isMessagePrivate = value.includes(secretKey);
+    const morseCodeWithoutCopyright = removeCopyright(value);
+
+    const isMessagePrivate = morseCodeWithoutCopyright.includes(publicKey);
 
     if (isMessagePrivate) {
-      handleDealingPrivateMessages(value);
+      handleDealingPrivateMessages(morseCodeWithoutCopyright);
     } else {
-      handleSetMorseCode(value);
+      handleSetMorseCode(morseCodeWithoutCopyright);
     }
   };
 
@@ -44,7 +47,7 @@ function useForm() {
             setIsLoading(false);
 
             const { recipientInfo, morseCodeWithoutRecipientInfo } =
-              decodeRecipientInfo(morseCode);
+              handleMorseCodeDecrypt(morseCode);
 
             const phoneNumber = responseUnsafe.contact?.phone_number?.replace(
               "98",

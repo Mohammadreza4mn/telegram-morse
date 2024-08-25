@@ -1,8 +1,13 @@
 import { TTranslateMode } from "../interface";
 import { useTelegram } from "context/telegram";
 import { ChangeEventHandler, useState } from "react";
-import { encodeString, translateTextToMorse } from "../helper";
-import { secretKey, translateDefaultMode } from "../constants";
+import {
+  handleEncrypt,
+  makeSecretKey,
+  translateMorseToText,
+  translateTextToMorse,
+} from "../helper";
+import { publicKey, robotCopyright, translateDefaultMode } from "../constants";
 
 interface IUseCopy {
   translateMode: TTranslateMode;
@@ -21,15 +26,22 @@ function useCopy({ translateMode, morseCode, text }: IUseCopy) {
 
   const handleSetRecipientInfo = (value: string) => setRecipientInfo(value);
 
-  const handleAddRecipientInfoToMorse = (morseCode: string) => {
+  const handleEncryptMorse = (morseCode: string) => {
     if (!recipientInfo) return morseCode;
 
-    const recipientEncoded = `${secretKey} ${translateTextToMorse(
-      encodeString(recipientInfo)
-    )}${secretKey}`;
+    const recipientEncapsulation = `${publicKey} ${translateTextToMorse(
+      handleEncrypt({ text: recipientInfo })
+    )}${publicKey}`;
 
-    const arrayMorseCode = morseCode.split(" ");
-    arrayMorseCode.splice(arrayMorseCode.length / 2, 0, recipientEncoded);
+    const textEncrypted = handleEncrypt({
+      text: translateMorseToText(morseCode),
+      secretKey: makeSecretKey(recipientInfo),
+    });
+
+    const textToMorse = translateTextToMorse(textEncrypted);
+
+    const arrayMorseCode = textToMorse.split(" ");
+    arrayMorseCode.splice(arrayMorseCode.length / 2, 0, recipientEncapsulation);
 
     const arrayToString = arrayMorseCode.join(" ");
 
@@ -41,7 +53,7 @@ function useCopy({ translateMode, morseCode, text }: IUseCopy) {
       translateMode === translateDefaultMode
         ? {
             name: "Morse code",
-            value: handleAddRecipientInfoToMorse(morseCode),
+            value: handleEncryptMorse(morseCode),
           }
         : { name: "Text", value: text };
 
@@ -49,7 +61,7 @@ function useCopy({ translateMode, morseCode, text }: IUseCopy) {
       await navigator.clipboard.writeText(
         hasCopyright
           ? `${entity.value}
-🤖translated by https://t.me/morse_code_translator_bot/start`
+${robotCopyright}`
           : entity.value
       );
 

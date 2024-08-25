@@ -1,12 +1,12 @@
 import morseTable from "constants/morseTable";
-import { secretKey } from "./constants";
+import { publicKey, robotCopyright } from "./constants";
 
 const translateTextToMorse = (text: string) => {
   const textArray = text.toLocaleUpperCase().split("");
 
   const morseCode = textArray.reduce(
     (accumulator, currentValue) =>
-      accumulator + `${morseTable[currentValue] || "?"} `,
+      `${accumulator}${morseTable[currentValue] || "?"} `,
     ""
   );
 
@@ -33,18 +33,85 @@ const translateMorseToText = (morse: string) => {
   return text;
 };
 
-const encodeString = (text: string) => {
-  const textReversed = text.split("").reverse().join("");
+const makeSecretKey = (text: string) => {
+  const textToArray = text.split("");
 
-  return textReversed;
+  const sumCharCode = textToArray.reduce((accumulator, currentValue) => {
+    let charCode = currentValue.codePointAt(0);
+
+    if (charCode) {
+      return accumulator + charCode;
+    } else {
+      return accumulator;
+    }
+  }, 0);
+
+  const averageCharCode = sumCharCode / textToArray.length;
+
+  return parseInt(averageCharCode + "");
 };
 
-const decodeRecipientInfo = (morseCode: string) => {
+const handleDecrypt = ({
+  text,
+  secretKey = 0,
+}: {
+  text: string;
+  secretKey?: number;
+}) => {
+  const arrayCharCode = text
+    .split(" ")
+    .map((item: string) => +item - secretKey);
+
+  const decrypted = String.fromCodePoint(...arrayCharCode);
+
+  return decrypted;
+};
+
+const handleEncrypt = ({
+  text,
+  secretKey = 0,
+}: {
+  text: string;
+  secretKey?: number;
+}) => {
+  const encrypted = text
+    .split("")
+    .reduce((accumulator, currentValue, currentIndex) => {
+      let acc = !!currentIndex ? `${accumulator} ` : "";
+      let charCode = currentValue.codePointAt(0);
+
+      if (charCode) {
+        return `${acc}${charCode + secretKey}`;
+      } else {
+        return accumulator;
+      }
+    }, "");
+
+  return encrypted;
+};
+
+const handleDecryptionMorseCodeOperation = ({
+  arrayMorseCode,
+  secretKey,
+}: {
+  arrayMorseCode: Array<string>;
+  secretKey?: number;
+}) => {
+  const joinArray = arrayMorseCode.join(" ");
+  const decrypted = handleDecrypt({
+    text: translateMorseToText(joinArray),
+    secretKey,
+  });
+
+  return decrypted;
+};
+
+const handleMorseCodeDecrypt = (morseCode: string) => {
   const arrayMorseCode = morseCode.split(" ");
 
   const { 0: indexStart, 1: indexEnd } = [
-    arrayMorseCode.indexOf(secretKey),
-    arrayMorseCode.lastIndexOf(secretKey),
+    arrayMorseCode.indexOf(publicKey),
+    arrayMorseCode.lastIndexOf(publicKey),
   ];
 
   const arrayMorseCodeRecipient = arrayMorseCode.splice(
@@ -53,17 +120,32 @@ const decodeRecipientInfo = (morseCode: string) => {
   );
   arrayMorseCodeRecipient.splice(0, 1);
   arrayMorseCodeRecipient.splice(-1, 1);
-  const morseCodeRecipient = arrayMorseCodeRecipient.reverse().join(" ");
-  const recipientInfo = translateMorseToText(morseCodeRecipient);
 
-  const morseCodeWithoutRecipientInfo = arrayMorseCode.join(" ");
+  const recipientInfoDecrypted = handleDecryptionMorseCodeOperation({
+    arrayMorseCode: arrayMorseCodeRecipient,
+  });
 
-  return { recipientInfo, morseCodeWithoutRecipientInfo };
+  const textDecrypted = handleDecryptionMorseCodeOperation({
+    arrayMorseCode,
+    secretKey: makeSecretKey(recipientInfoDecrypted),
+  });
+
+  const morseCodeWithoutRecipientInfo = translateTextToMorse(textDecrypted);
+
+  return {
+    recipientInfo: recipientInfoDecrypted,
+    morseCodeWithoutRecipientInfo,
+  };
 };
 
+const removeCopyright = (morseCode: string) =>
+  morseCode.replace(robotCopyright, "");
+
 export {
-  encodeString,
-  decodeRecipientInfo,
+  handleEncrypt,
+  makeSecretKey,
+  removeCopyright,
+  handleMorseCodeDecrypt,
   translateMorseToText,
   translateTextToMorse,
 };
