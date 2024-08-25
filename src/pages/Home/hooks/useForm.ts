@@ -40,9 +40,9 @@ function useForm() {
         setIsLoading(true);
 
         webApp.requestContact((status, { responseUnsafe }) => {
-          setIsLoading(false);
-
           if (status) {
+            setIsLoading(false);
+
             const { recipientInfo, morseCodeWithoutRecipientInfo } =
               decodeRecipientInfo(morseCode);
 
@@ -64,6 +64,8 @@ function useForm() {
               setMorseCode("");
             }
           } else {
+            setIsLoading(false);
+
             webApp.showAlert(
               "We do not have access to your phone number and without it we cannot decipher your message."
             );
