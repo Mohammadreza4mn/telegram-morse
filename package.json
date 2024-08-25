@@ -1,6 +1,6 @@
 {
   "name": "telegram-morse",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "homepage": "https://mohammadreza4mn.github.io/telegram-morse",
   "dependencies": {
