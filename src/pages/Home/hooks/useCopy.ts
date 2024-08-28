@@ -3,6 +3,7 @@ import { useTelegram } from "context/telegram";
 import { ChangeEventHandler, useState } from "react";
 import {
   handleEncrypt,
+  handleReverseString,
   makeSecretKey,
   translateMorseToText,
   translateTextToMorse,
@@ -30,7 +31,7 @@ function useCopy({ translateMode, morseCode, text }: IUseCopy) {
     if (!recipientInfo) return morseCode;
 
     const recipientEncapsulation = `${publicKey} ${translateTextToMorse(
-      handleEncrypt({ text: recipientInfo })
+      handleEncrypt({ text: handleReverseString(recipientInfo) })
     )}${publicKey}`;
 
     const textEncrypted = handleEncrypt({

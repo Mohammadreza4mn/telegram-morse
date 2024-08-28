@@ -46,9 +46,7 @@ const makeSecretKey = (text: string) => {
     }
   }, 0);
 
-  const averageCharCode = sumCharCode / textToArray.length;
-
-  return parseInt(averageCharCode + "");
+  return sumCharCode;
 };
 
 const handleDecrypt = ({
@@ -131,9 +129,10 @@ const handleMorseCodeDecrypt = (morseCode: string) => {
   });
 
   const morseCodeWithoutRecipientInfo = translateTextToMorse(textDecrypted);
+  const recipientInfoReverse = handleReverseString(recipientInfoDecrypted);
 
   return {
-    recipientInfo: recipientInfoDecrypted,
+    recipientInfo: recipientInfoReverse,
     morseCodeWithoutRecipientInfo,
   };
 };
@@ -141,11 +140,18 @@ const handleMorseCodeDecrypt = (morseCode: string) => {
 const removeCopyright = (morseCode: string) =>
   morseCode.replace(robotCopyright, "");
 
+const handleReverseString = (text: string) => {
+  const textReversed = text.split("").reverse().join("");
+
+  return textReversed;
+};
+
 export {
   handleEncrypt,
   makeSecretKey,
   removeCopyright,
-  handleMorseCodeDecrypt,
+  handleReverseString,
   translateMorseToText,
   translateTextToMorse,
+  handleMorseCodeDecrypt,
 };
