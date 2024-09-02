@@ -15,7 +15,9 @@ const StyledFieldset = styled.fieldset`
   position: relative;
 `;
 
-const ContainerInput = styled.div<{ isHidden: boolean }>`
+const ContainerInput = styled.div.withConfig({
+  shouldForwardProp: (prop) => !["isHidden"].includes(prop),
+})<{ isHidden: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,7 +44,9 @@ const InputExample = styled(InputHelper)`
   align-self: flex-start;
 `;
 
-const Main = styled.div<{ isHidden: boolean }>`
+const Main = styled.div.withConfig({
+  shouldForwardProp: (prop) => !["isHidden"].includes(prop),
+})<{ isHidden: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -54,7 +58,9 @@ const Main = styled.div<{ isHidden: boolean }>`
   margin-bottom: ${({ isHidden }) => (isHidden ? 0 : "1rem")};
 `;
 
-const Slogan = styled.b<{ isHidden: boolean }>`
+const Slogan = styled.b.withConfig({
+  shouldForwardProp: (prop) => !["isHidden"].includes(prop),
+})<{ isHidden: boolean }>`
   opacity: ${({ isHidden }) => (isHidden ? 0 : 1)};
   max-height: ${({ isHidden }) => (isHidden ? 0 : "3rem")};
   overflow: hidden;
