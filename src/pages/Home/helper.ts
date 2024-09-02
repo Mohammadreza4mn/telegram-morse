@@ -58,7 +58,7 @@ const handleDecrypt = ({
 }) => {
   const arrayCharCode = text
     .split(" ")
-    .map((item: string) => +item - secretKey);
+    .map((item: string) => +item + secretKey);
 
   const decrypted = String.fromCodePoint(...arrayCharCode);
 
@@ -79,7 +79,7 @@ const handleEncrypt = ({
       let charCode = currentValue.codePointAt(0);
 
       if (charCode) {
-        return `${acc}${charCode + secretKey}`;
+        return `${acc}${Math.abs(charCode - secretKey)}`;
       } else {
         return accumulator;
       }
