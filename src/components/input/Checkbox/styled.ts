@@ -8,7 +8,9 @@ const SLabel = styled.label`
   cursor: pointer;
 `;
 
-const StyledCheckbox = styled.input`
+const StyledCheckbox = styled.input.attrs({
+  type: "checkbox",
+})`
   cursor: pointer !important;
 `;
 

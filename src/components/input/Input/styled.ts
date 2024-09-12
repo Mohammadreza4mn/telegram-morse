@@ -1,6 +1,8 @@
 import styled from "styled-components";
 
-const StyledInput = styled.input`
+const StyledInput = styled.input.attrs({
+  type: "text",
+})`
   font-size: 1.063rem;
   line-height: 1.313rem;
   outline: none;

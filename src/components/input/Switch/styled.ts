@@ -21,7 +21,9 @@ const Container = styled.div`
   border: ${({ theme }) => `0.125rem solid ${theme.colors.buttonBg}`};
 `;
 
-const StyledCheckbox = styled.input`
+const StyledCheckbox = styled.input.attrs({
+  type: "checkbox",
+})`
   opacity: 0;
 
   &:checked + div > span {
