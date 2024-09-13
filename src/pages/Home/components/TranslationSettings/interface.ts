@@ -1,7 +1,7 @@
 import { ChangeEventHandler } from "react";
 
 interface ITranslationSettings {
-  handleToggleCopyright: ChangeEventHandler<HTMLInputElement>;
+  handleAddMessageTimer: ChangeEventHandler<HTMLInputElement>;
   handleSetRecipientInfo: (value: string) => void;
   recipientInfo: string;
 }

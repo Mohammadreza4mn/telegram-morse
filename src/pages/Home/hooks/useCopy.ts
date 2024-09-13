@@ -3,12 +3,18 @@ import { useTelegram } from "context/telegram";
 import { ChangeEventHandler, useState } from "react";
 import {
   handleEncrypt,
-  handleReverseString,
+  joinEncapsulations,
+  makeEncapsulation,
   makeSecretKey,
   translateMorseToText,
   translateTextToMorse,
 } from "../helper";
-import { publicKey, robotCopyright, translateDefaultMode } from "../constants";
+import {
+  recipientKey,
+  robotCopyright,
+  timerKey,
+  translateDefaultMode,
+} from "../constants";
 
 interface IUseCopy {
   translateMode: TTranslateMode;
@@ -18,31 +24,41 @@ interface IUseCopy {
 
 function useCopy({ translateMode, morseCode, text }: IUseCopy) {
   const webApp = useTelegram();
-  const [hasCopyright, setHasCopyright] = useState(false);
+  const [messageTimer, setMessageTimer] = useState(NaN);
   const [recipientInfo, setRecipientInfo] = useState("");
 
-  const handleToggleCopyright: ChangeEventHandler<HTMLInputElement> = ({
+  const handleAddMessageTimer: ChangeEventHandler<HTMLInputElement> = ({
     target,
-  }) => setHasCopyright(target.checked);
+  }) => setMessageTimer(+new Date(target.value));
 
   const handleSetRecipientInfo = (value: string) => setRecipientInfo(value);
 
   const handleEncryptMorse = (morseCode: string) => {
-    if (!recipientInfo) return morseCode;
+    if (!recipientInfo && !messageTimer) return morseCode;
 
-    const recipientEncapsulation = `${publicKey} ${translateTextToMorse(
-      handleEncrypt({ text: handleReverseString(recipientInfo) })
-    )}${publicKey}`;
+    const messageTimerEncapsulation = makeEncapsulation({
+      data: messageTimer,
+      key: timerKey,
+    });
+
+    const recipientEncapsulation = makeEncapsulation({
+      data: recipientInfo,
+      key: recipientKey,
+    });
 
     const textEncrypted = handleEncrypt({
       text: translateMorseToText(morseCode),
-      secretKey: makeSecretKey(recipientInfo),
+      secretKey: makeSecretKey(recipientInfo || messageTimer + ""),
     });
 
     const textToMorse = translateTextToMorse(textEncrypted);
 
     const arrayMorseCode = textToMorse.split(" ");
-    arrayMorseCode.splice(arrayMorseCode.length / 2, 0, recipientEncapsulation);
+    arrayMorseCode.splice(
+      arrayMorseCode.length / 2,
+      0,
+      joinEncapsulations([recipientEncapsulation, messageTimerEncapsulation])
+    );
 
     const arrayToString = arrayMorseCode.join(" ");
 
@@ -59,12 +75,8 @@ function useCopy({ translateMode, morseCode, text }: IUseCopy) {
         : { name: "Text", value: text };
 
     try {
-      await navigator.clipboard.writeText(
-        hasCopyright
-          ? `${entity.value}
-${robotCopyright}`
-          : entity.value
-      );
+      await navigator.clipboard.writeText(`${entity.value}
+${robotCopyright}`);
 
       webApp.showAlert(`${entity.name} copied to clipboard`);
     } catch (error) {
@@ -77,7 +89,7 @@ ${robotCopyright}`
   return {
     handleCopy,
     recipientInfo,
-    handleToggleCopyright,
+    handleAddMessageTimer,
     handleSetRecipientInfo,
   };
 }

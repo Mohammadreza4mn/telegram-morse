@@ -1,11 +1,11 @@
 import type { ITranslationSettings } from "./interface";
-import { Switch, Checkbox, Input } from "components";
+import { Switch, Input, DateTime } from "components";
 import * as Styled from "./styled";
 import { ChangeEventHandler, useState } from "react";
-import { copyrightMessage, messageMode } from "pages/Home/constants";
+import { messageMode } from "pages/Home/constants";
 
 function TranslationSettings(props: ITranslationSettings) {
-  const { handleSetRecipientInfo, handleToggleCopyright, recipientInfo } =
+  const { handleSetRecipientInfo, handleAddMessageTimer, recipientInfo } =
     props;
 
   const [isPrivateMessage, setIsPrivateMessage] = useState(false);
@@ -53,10 +53,10 @@ function TranslationSettings(props: ITranslationSettings) {
         </Styled.ContainerInput>
 
         <Styled.Divider />
-        <Checkbox
-          label={copyrightMessage}
-          title="add copyright"
-          onChange={handleToggleCopyright}
+
+        <DateTime
+          label="Disappearing message: "
+          onChange={handleAddMessageTimer}
         />
       </Styled.Main>
 

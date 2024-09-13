@@ -1,5 +1,5 @@
 import morseTable from "constants/morseTable";
-import { publicKey, robotCopyright } from "./constants";
+import { robotCopyright, timerKey } from "./constants";
 
 const translateTextToMorse = (text: string) => {
   const textArray = text.toLocaleUpperCase().split("");
@@ -106,36 +106,82 @@ const handleDecryptionMorseCodeOperation = ({
   return decrypted;
 };
 
-const handleMorseCodeDecrypt = (morseCode: string) => {
-  const arrayMorseCode = morseCode.split(" ");
+const handleMorseCodeDecrypt = ({
+  morseCode,
+  capsuleKey,
+}: {
+  morseCode: string;
+  capsuleKey: string;
+}) => {
+  const { arrayMorseCodeCapsule, arrayMorseCodeWithoutCapsule } =
+    handleExtractCapsule({
+      morseCode,
+      capsuleKey,
+    });
 
-  const { 0: indexStart, 1: indexEnd } = [
-    arrayMorseCode.indexOf(publicKey),
-    arrayMorseCode.lastIndexOf(publicKey),
-  ];
-
-  const arrayMorseCodeRecipient = arrayMorseCode.splice(
-    indexStart,
-    indexEnd - indexStart + 1
-  );
-  arrayMorseCodeRecipient.splice(0, 1);
-  arrayMorseCodeRecipient.splice(-1, 1);
-
-  const recipientInfoDecrypted = handleDecryptionMorseCodeOperation({
-    arrayMorseCode: arrayMorseCodeRecipient,
+  const capsuleDecrypted = handleDecryptionMorseCodeOperation({
+    arrayMorseCode: arrayMorseCodeCapsule,
   });
 
   const textDecrypted = handleDecryptionMorseCodeOperation({
-    arrayMorseCode,
-    secretKey: makeSecretKey(recipientInfoDecrypted),
+    arrayMorseCode: arrayMorseCodeWithoutCapsule,
+    secretKey: makeSecretKey(capsuleDecrypted),
   });
 
-  const morseCodeWithoutRecipientInfo = translateTextToMorse(textDecrypted);
-  const recipientInfoReverse = handleReverseString(recipientInfoDecrypted);
+  const morseCodeWithoutCapsule = translateTextToMorse(textDecrypted);
+  const decryptCapsule = handleReverseString(capsuleDecrypted);
 
   return {
-    recipientInfo: recipientInfoReverse,
-    morseCodeWithoutRecipientInfo,
+    decryptCapsule,
+    morseCodeWithoutCapsule,
+  };
+};
+
+const handleExtractCapsule = ({
+  morseCode,
+  capsuleKey,
+}: {
+  morseCode: string;
+  capsuleKey: string;
+}) => {
+  const arrayMorseCodeWithoutCapsule = morseCode.split(" ");
+
+  const { 0: indexStart, 1: indexEnd } = [
+    arrayMorseCodeWithoutCapsule.indexOf(capsuleKey),
+    arrayMorseCodeWithoutCapsule.lastIndexOf(capsuleKey),
+  ];
+
+  const arrayMorseCodeCapsule = arrayMorseCodeWithoutCapsule.splice(
+    indexStart,
+    indexEnd - indexStart + 1
+  );
+  arrayMorseCodeCapsule.splice(0, 1);
+  arrayMorseCodeCapsule.splice(-1, 1);
+
+  return { arrayMorseCodeWithoutCapsule, arrayMorseCodeCapsule };
+};
+
+const checkMessageExpiration = ({
+  morseCode,
+  timestamp,
+}: {
+  morseCode: string;
+  timestamp: number;
+}) => {
+  const {
+    arrayMorseCodeCapsule: arrayMorseCodeTimestamp,
+    arrayMorseCodeWithoutCapsule,
+  } = handleExtractCapsule({ morseCode, capsuleKey: timerKey });
+
+  const timestampMessage = +handleReverseString(
+    handleDecryptionMorseCodeOperation({
+      arrayMorseCode: arrayMorseCodeTimestamp,
+    })
+  );
+
+  return {
+    hasExpired: timestampMessage < timestamp,
+    validMorseCode: arrayMorseCodeWithoutCapsule.join(" "),
   };
 };
 
@@ -148,12 +194,37 @@ const handleReverseString = (text: string) => {
   return textReversed;
 };
 
+const makeEncapsulation = ({
+  data,
+  key,
+}: {
+  data: string | number;
+  key: string;
+}) => {
+  if (!data) return null;
+
+  return `${key} ${translateTextToMorse(
+    handleEncrypt({ text: handleReverseString(data + "") })
+  )}${key}`;
+};
+
+const joinEncapsulations = (capsule: Array<string | null>) => {
+  const capsuleList = capsule.filter(Boolean);
+  const capsuleJoin = capsuleList.join(" ");
+
+  return capsuleJoin;
+};
+
 export {
   handleEncrypt,
+  handleDecrypt,
   makeSecretKey,
   removeCopyright,
+  makeEncapsulation,
+  joinEncapsulations,
   handleReverseString,
   translateMorseToText,
   translateTextToMorse,
   handleMorseCodeDecrypt,
+  checkMessageExpiration,
 };

@@ -25,7 +25,7 @@ function Home() {
   const {
     handleCopy,
     recipientInfo,
-    handleToggleCopyright,
+    handleAddMessageTimer,
     handleSetRecipientInfo,
   } = useCopy({
     text,
@@ -40,7 +40,7 @@ function Home() {
 
   return (
     <Styled.Container>
-      {isLoading && <Spinner text="Getting your phone number" />}
+      {isLoading && <Spinner text="Loading ..." />}
 
       <Styled.TitleWrap
         direction={
@@ -101,7 +101,7 @@ function Home() {
 
       <TranslationSettings
         recipientInfo={recipientInfo}
-        handleToggleCopyright={handleToggleCopyright}
+        handleAddMessageTimer={handleAddMessageTimer}
         handleSetRecipientInfo={handleSetRecipientInfo}
       />
     </Styled.Container>

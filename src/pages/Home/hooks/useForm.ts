@@ -1,12 +1,14 @@
 import { useTelegram } from "context/telegram";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import {
+  checkMessageExpiration,
   handleMorseCodeDecrypt,
   removeCopyright,
   translateMorseToText,
   translateTextToMorse,
 } from "../helper";
-import { confirmPrivateMessages, publicKey } from "../constants";
+import { confirmPrivateMessages, recipientKey, timerKey } from "../constants";
+import getCurrentDate from "api/getCurrentDate";
 
 function useForm() {
   const webApp = useTelegram();
@@ -28,16 +30,62 @@ function useForm() {
   }) => {
     const morseCodeWithoutCopyright = removeCopyright(value);
 
-    const isMessagePrivate = morseCodeWithoutCopyright.includes(publicKey);
+    const isMessageSpecific = [recipientKey, timerKey].some((key) =>
+      morseCodeWithoutCopyright.includes(key)
+    );
 
-    if (isMessagePrivate) {
-      handleDealingPrivateMessages(morseCodeWithoutCopyright);
+    if (isMessageSpecific) {
+      handleDisappearMessage(morseCodeWithoutCopyright);
     } else {
       handleSetMorseCode(morseCodeWithoutCopyright);
     }
   };
 
-  const handleDealingPrivateMessages = (morseCode: string) => {
+  const handleDisappearMessage = async (morseCode: string) => {
+    const isMessageDisappear = morseCode.includes(timerKey);
+
+    if (isMessageDisappear) {
+      setIsLoading(true);
+
+      try {
+        const { datetime } = await getCurrentDate();
+        const currentTimestamp = Date.parse(datetime);
+        setIsLoading(false);
+
+        const { hasExpired, validMorseCode } = checkMessageExpiration({
+          morseCode,
+          timestamp: currentTimestamp,
+        });
+
+        if (!hasExpired) {
+          const isPrivateMessage = validMorseCode.includes(recipientKey);
+
+          if (isPrivateMessage) {
+            handlePrivateMessage(validMorseCode);
+          } else {
+            const { morseCodeWithoutCapsule } = handleMorseCodeDecrypt({
+              morseCode,
+              capsuleKey: timerKey,
+            });
+
+            handleSetMorseCode(morseCodeWithoutCapsule);
+          }
+        } else {
+          webApp.showAlert("This message has expired");
+          setMorseCode("");
+        }
+      } catch (error) {
+        webApp.showAlert("An error occurred, please try again");
+        setMorseCode("");
+      } finally {
+        setIsLoading(false);
+      }
+    } else {
+      handlePrivateMessage(morseCode);
+    }
+  };
+
+  const handlePrivateMessage = (morseCode: string) => {
     webApp.showConfirm(confirmPrivateMessages, (status) => {
       if (status) {
         setIsLoading(true);
@@ -46,8 +94,11 @@ function useForm() {
           if (status) {
             setIsLoading(false);
 
-            const { recipientInfo, morseCodeWithoutRecipientInfo } =
-              handleMorseCodeDecrypt(morseCode);
+            const { decryptCapsule, morseCodeWithoutCapsule } =
+              handleMorseCodeDecrypt({
+                morseCode,
+                capsuleKey: recipientKey,
+              });
 
             const phoneNumber = responseUnsafe.contact?.phone_number?.replace(
               "98",
@@ -55,11 +106,11 @@ function useForm() {
             );
 
             const isRecipient = [phoneNumber, webApp?.username].includes(
-              recipientInfo
+              decryptCapsule
             );
 
             if (isRecipient) {
-              handleSetMorseCode(morseCodeWithoutRecipientInfo);
+              handleSetMorseCode(morseCodeWithoutCapsule);
             } else {
               webApp.showAlert(
                 "This message is not for you and you are not able to read it."
