@@ -1,7 +1,7 @@
 const getCurrentDate = async (): Promise<IResponse> => {
   try {
     const response = await fetch(
-      "http://worldtimeapi.org/api/timezone/Asia/Tehran"
+      "https://worldtimeapi.org/api/timezone/Asia/Tehran"
     );
 
     if (response.ok) {
