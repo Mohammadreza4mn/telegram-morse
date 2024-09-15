@@ -34,19 +34,10 @@ const translateMorseToText = (morse: string) => {
 };
 
 const makeSecretKey = (text: string) => {
-  const textToArray = text.split("");
-
-  const sumCharCode = textToArray.reduce((accumulator, currentValue) => {
-    let charCode = currentValue.codePointAt(0);
-
-    if (charCode) {
-      return accumulator + charCode;
-    } else {
-      return accumulator;
-    }
-  }, 0);
-
-  const secretKey = sumCharCode * +process.env.REACT_APP_SECRET_FORMULA!;
+  // eslint-disable-next-line no-new-func
+  const secretKey = new Function("text", process.env.REACT_APP_SECRET_FORMULA!)(
+    text
+  );
 
   return secretKey;
 };
