@@ -55,6 +55,7 @@ const BtnTop = styled(Top)`
 `;
 
 const Container = styled.main`
+  height: 100%;
   display: grid;
   position: relative;
 `;

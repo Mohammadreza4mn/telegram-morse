@@ -7,11 +7,13 @@ const Container = styled.main`
   justify-content: center;
   gap: 0.75rem;
   margin: 1rem;
+  height: 90dvh;
 `;
 
 const TextareaWrap = styled.section<{
   direction: "column" | "column-reverse";
 }>`
+  height: 100%;
   display: flex;
   gap: 0.5rem;
   position: relative;

@@ -63,7 +63,6 @@ function Home() {
         }
       >
         <Styled.STextarea
-          rows={6}
           name="text"
           customStyle={{
             textTransform: "capitalize",
@@ -83,7 +82,6 @@ function Home() {
         </Styled.ButtonClear>
 
         <Styled.STextarea
-          rows={6}
           name="morse"
           value={morseCode}
           onChange={handleMorseToText}
