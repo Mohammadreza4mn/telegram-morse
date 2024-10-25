@@ -1,72 +1,76 @@
 import type { ITranslationSettings } from "./interface";
-import { Switch, Input, DateTime } from "components";
-import * as Styled from "./styled";
-import { ChangeEventHandler, useState } from "react";
-import { messageMode } from "pages/Home/constants";
+import { Input, DateTime } from "components";
+import { Main, StyledFieldset } from "./styled";
+import { ChangeEventHandler } from "react";
+import { MaskInput } from "./components";
+import type {
+  IHandleShowInput,
+  TToggleMask,
+} from "./components/MaskInput/interface";
 
 function TranslationSettings(props: ITranslationSettings) {
   const { handleSetRecipientInfo, handleAddMessageTimer, recipientInfo } =
     props;
 
-  const [isPrivateMessage, setIsPrivateMessage] = useState(false);
-  const [toggleShow, setToggleShow] = useState(false);
+  const handleShowInputDateTime = ({ ref }: IHandleShowInput) =>
+    ref.current?.showPicker();
 
-  const handleTogglePrivateMessage: ChangeEventHandler<HTMLInputElement> = ({
-    target: { checked },
-  }) => {
-    if (!checked) {
-      handleSetRecipientInfo("");
-    }
-    setIsPrivateMessage(checked);
+  const handleShowInputMessagePrivate = ({
+    ref,
+    toggleMask,
+  }: IHandleShowInput) => {
+    toggleMask(false);
+    ref.current?.focus();
   };
-  const handleToggleSettings = () => setToggleShow((state) => !state);
+
+  const onChangeInputMessagePrivate: ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => handleSetRecipientInfo(event.target.value);
+
+  const onChangeInputDateTime: ChangeEventHandler<HTMLInputElement> = (event) =>
+    handleAddMessageTimer(event);
+
+  const handleBlurInputMessagePrivate = ({
+    event,
+    toggleMask,
+  }: {
+    event: React.FocusEvent<HTMLInputElement, Element>;
+    toggleMask: TToggleMask;
+  }) => {
+    if (!event.target.value) {
+      toggleMask(true);
+    }
+  };
 
   return (
-    <Styled.StyledFieldset>
+    <StyledFieldset>
       <legend>Settings</legend>
 
-      <Styled.Slogan isHidden={toggleShow}>
-        Go into settings to customize your Morse code message...
-      </Styled.Slogan>
-
-      <Styled.Main isHidden={!toggleShow}>
-        <Switch
-          knobs={messageMode}
-          label="Message mode:"
-          onChange={handleTogglePrivateMessage}
+      <Main>
+        <MaskInput
+          handleShowInput={handleShowInputMessagePrivate}
+          maskTitle="Message privately 🔐"
+          onChangeInput={onChangeInputMessagePrivate}
+          renderInput={({ toggleMask, ...props }) => (
+            <Input
+              value={recipientInfo}
+              placeholder="Recipient's username or mobile"
+              onBlur={(event) =>
+                handleBlurInputMessagePrivate({ event, toggleMask })
+              }
+              {...props}
+            />
+          )}
         />
 
-        <Styled.ContainerInput isHidden={!isPrivateMessage}>
-          <Input
-            value={recipientInfo}
-            placeholder="username or phone number"
-            onChange={({ target }) => handleSetRecipientInfo(target.value)}
-          />
-          <Styled.InputHelper>
-            The exact username, which should be capitalized and the lowercase
-            letters, or the phone number of the recipient of the message, as in
-            the example below.
-          </Styled.InputHelper>
-          <Styled.InputExample>
-            Example: mohammadReZa or 09121234567
-          </Styled.InputExample>
-        </Styled.ContainerInput>
-
-        <Styled.Divider />
-
-        <DateTime
-          label="Disappearing message: "
-          onChange={handleAddMessageTimer}
+        <MaskInput
+          handleShowInput={handleShowInputDateTime}
+          maskTitle="Disappearing message ⏱️"
+          onChangeInput={onChangeInputDateTime}
+          renderInput={({ toggleMask, ...props }) => <DateTime {...props} />}
         />
-      </Styled.Main>
-
-      <Styled.ContainerBtn>
-        <Styled.BtnToggle
-          onClick={handleToggleSettings}
-          direction={toggleShow ? "top" : "bottom"}
-        />
-      </Styled.ContainerBtn>
-    </Styled.StyledFieldset>
+      </Main>
+    </StyledFieldset>
   );
 }
 
