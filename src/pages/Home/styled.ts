@@ -25,11 +25,13 @@ const TitleWrap = styled.section<{
 }>`
   display: flex;
   justify-content: space-between;
-  width: 100%;
   flex-direction: ${({ direction }) => direction};
   position: relative;
-  height: 2.75rem;
+  height: 6.15rem;
   align-items: center;
+  background-color: ${({ theme }) => theme.colors.primaryBg};
+  border-radius: 0.625rem;
+  padding: 0.5rem;
 
   strong {
     font-size: 1.063rem;

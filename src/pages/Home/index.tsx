@@ -42,20 +42,11 @@ function Home() {
     <Styled.Container>
       {isLoading && <Spinner text="Loading ..." />}
 
-      <Styled.TitleWrap
-        direction={
-          translateMode === translateDefaultMode ? "row" : "row-reverse"
-        }
-      >
-        <strong>Text</strong>
-        <Styled.ButtonSwap
-          title="swap translate mode"
-          onClick={handleSwapTranslateMode}
-        >
-          <Swap />
-        </Styled.ButtonSwap>
-        <strong>Morse</strong>
-      </Styled.TitleWrap>
+      <TranslationSettings
+        recipientInfo={recipientInfo}
+        handleAddMessageTimer={handleAddMessageTimer}
+        handleSetRecipientInfo={handleSetRecipientInfo}
+      />
 
       <Styled.TextareaWrap
         direction={
@@ -72,6 +63,21 @@ function Home() {
           onChange={handleTextToMorse}
           disabled={translateMode !== translateDefaultMode}
         />
+
+        <Styled.TitleWrap
+          direction={
+            translateMode === translateDefaultMode ? "row" : "row-reverse"
+          }
+        >
+          <strong>Text</strong>
+          <Styled.ButtonSwap
+            title="swap translate mode"
+            onClick={handleSwapTranslateMode}
+          >
+            <Swap />
+          </Styled.ButtonSwap>
+          <strong>Morse</strong>
+        </Styled.TitleWrap>
 
         <Styled.ButtonClear
           title="clear input"
@@ -96,12 +102,6 @@ function Home() {
           <Copy />
         </Styled.ButtonCopy>
       </Styled.TextareaWrap>
-
-      <TranslationSettings
-        recipientInfo={recipientInfo}
-        handleAddMessageTimer={handleAddMessageTimer}
-        handleSetRecipientInfo={handleSetRecipientInfo}
-      />
     </Styled.Container>
   );
 }
