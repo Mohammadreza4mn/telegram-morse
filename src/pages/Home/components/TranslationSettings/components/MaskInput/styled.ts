@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 const ContainerMaskInput = styled.div`
   position: relative;
-  display: grid;
+  display: flex;
 `;
 
 const Mask = styled.span`

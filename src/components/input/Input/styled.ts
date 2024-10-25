@@ -3,6 +3,7 @@ import styled from "styled-components";
 const StyledInput = styled.input.attrs({
   type: "text",
 })`
+  width: 100%;
   font-size: 1.063rem;
   line-height: 1.313rem;
   outline: none;
