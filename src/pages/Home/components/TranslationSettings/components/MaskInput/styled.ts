@@ -15,6 +15,10 @@ const Mask = styled.span`
   place-content: center;
   color: ${({ theme }) => theme.colors.primaryText};
   cursor: pointer;
+  &:active {
+    background-color: ${(props) =>
+      `color-mix(in srgb, ${props.theme.colors.buttonBg} 60%, ${props.theme.colors.buttonTextColor})`};
+  }
 `;
 
 export { Mask, ContainerMaskInput };
