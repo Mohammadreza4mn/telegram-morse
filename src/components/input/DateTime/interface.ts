@@ -1,7 +1,5 @@
 import { InputHTMLAttributes } from "react";
 
-interface IDateTime extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-}
+interface IDateTime extends InputHTMLAttributes<HTMLInputElement> {}
 
 export type { IDateTime };

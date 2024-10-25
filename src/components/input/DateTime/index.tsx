@@ -1,13 +1,9 @@
-import { SLabel } from "./styled";
+import { StyledInput } from "./styled";
+import { forwardRef, Ref } from "react";
 import type { IDateTime } from "./interface";
 
-function DateTime(props: IDateTime) {
-  return (
-    <SLabel>
-      {props.label}
-      <input type="datetime-local" {...props} />
-    </SLabel>
-  );
-}
+const DateTime = forwardRef((props: IDateTime, ref: Ref<HTMLInputElement>) => {
+  return <StyledInput {...props} ref={ref} />;
+});
 
 export default DateTime;
